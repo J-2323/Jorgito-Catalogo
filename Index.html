@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Jorgito's - Tienda</title><script src="https://cdn.tailwindcss.com"></script>
+<style>
+.offcanvas { position: fixed; top: 0; right: -400px; width: 400px; max-width: 90%; height: 100%; background: white; box-shadow: -2px 0 8px rgba(0,0,0,0.2); z-index: 1050; transition: right 0.3s ease; display: flex; flex-direction: column; }
+.offcanvas.open { right: 0; }
+.offcanvas-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1040; display: none; }
+.offcanvas-backdrop.show { display: block; }
+.image-modal { display: none; position: fixed; z-index: 1100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); cursor: pointer; align-items: center; justify-content: center; }
+.image-modal img { max-width: 90%; max-height: 90%; object-fit: contain; }
+.qty-btn { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; background: #f3f4f6; border-radius: 0.5rem; cursor: pointer; }
+.qty-btn:hover { background: #e5e7eb; }
+.qty-input { width: 45px; text-align: center; font-weight: 500; background: transparent; border: none; }
+select.talle-select { border: 1px solid #ddd; border-radius: 0.5rem; padding: 0.25rem 0.5rem; background: white; font-size: 0.875rem; }
+</style>
+</head>
+<body class="bg-gray-50">
+<div class="min-h-screen pb-24">
+<header style= "background:linear-gradient(90deg,rgba(50, 23, 120, 1) 0%, rgba(50, 23, 120, 1) 50%, rgba(54, 44, 242, 1) 100%);" class="text-white sticky top-0 z-40 shadow-lg"><div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center"><div class="flex gap-2"><div><h1 class="text-xl font-black">Jorgito</h1><p class="text-xs text-white/80">Catálogo de Artículos</p></div></div><button id="cartButton" class="bg-green-500 hover:bg-white hover:text-green-600 text-white font-bold py-2 px-6 rounded-full transition flex items-center gap-2 relative"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 10a4 4 0 0 1-8 0"></path><path d="M3.103 6.034h17.794"></path><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"></path></svg><span>Ir al carrito</span><span id="cartCount" class="absolute -top-2 -right-2 bg-yellow-400 text-green-600 text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold">0</span></button></div></header>
+<main class="max-w-7xl mx-auto px-4 py-8"><div class="space-y-6"><div class="bg-white p-6 rounded-3xl shadow-sm border"><div id="categoriesFilter" class="flex gap-2 flex-wrap"><button data-cat="all" class="cat-btn px-5 py-2.5 rounded-xl font-medium bg-indigo-600 text-white">Todos</button></div></div><div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div></div></main>
+</div>
+<div id="cartOffcanvas" class="offcanvas"><div class="p-4 bg-indigo-600 text-white flex justify-between"><h2 class="text-xl font-bold">🛒 Carrito</h2><button id="closeCartBtn" class="text-white text-2xl">&times;</button></div><div id="cartItemsList" class="flex-1 overflow-y-auto p-4"></div><div class="p-4 border-t"><div class="flex justify-between font-bold text-lg mb-4"><span>Total:</span><span id="cartTotal">$0</span></div><button id="whatsappBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl">💬 WhatsApp</button></div></div>
+<div id="offcanvasBackdrop" class="offcanvas-backdrop"></div>
+<div id="imageModal" class="image-modal" onclick="closeImageModal()"><img id="modalImage"></div>
+<script>
+const STORE_NAME = "Jorgito's";
+const WHATSAPP_NUMBER = "543425517395";
+const allProducts = [{"id":"95a74c7c-7810-44ec-b713-4730ead2e64b","categoria":"Calzado","nombre":"zapatilla SB JORDAN","precio":45500,"imagen":"imagenes/032b03e8-4297-4bfb-9de2-a53cdf521b93.jpg","talles":["34","35","36","37","38","39","40","41","42","43","44","45","46"]},{"id":"ef7d14aa-740c-4501-ba2d-7fd2ab3ea896","categoria":"Calzado","nombre":"zapatilla SB JORDAN","precio":45500,"imagen":"imagenes/27c36e07-f407-4ae2-adf0-e47716e3f9c9.jpg","talles":["34","35","36","37","38","39","40","41","42","43","44","45","47"]},{"id":"4c6710e6-afbb-42ba-ac39-3b972a60e4af","categoria":"Calzado","nombre":"zapatilla SB JORDAN","precio":45500,"imagen":"imagenes/7b79483b-f8ed-48ed-a39c-50940fcb08a7.jpg","talles":["34","35","36","37","38","39","40","41","42","43","44","45","48"]},{"id":"2589aa16-51ef-4e3a-9778-0dddb0f3d86a","categoria":"Calzado","nombre":"zapatilla JORDAN BOTITA","precio":45500,"imagen":"imagenes/aa54fb38-11c2-4ad5-8b9a-fea0b008364c.jpg","talles":["34","35","36","37","38","39","40","41","42","43","44","45","49"]},{"id":"cd9d063b-3c5f-41a7-bdb3-273e99d514a3","categoria":"Calzado","nombre":"zapatilla SUPERNOVA","precio":43500,"imagen":"imagenes/0d33d1e9-7a48-4f2b-b697-08ac5f2aae37.jpg","talles":["34","35","36","37","38","39","40","41","42","43","44","45","50"]},{"id":"4bfe561b-30d4-446a-ab9d-c66a8f9e0c3a","categoria":"Calzado","nombre":"zapatilla SUPERNOVA","precio":43500,"imagen":"imagenes/68c837f9-1d3d-4394-974c-ad84fa83c2b8.jpg","talles":[]},{"id":"ac7c2b72-b42a-4551-b862-45e424987c11","categoria":"Calzado","nombre":"zapatilla NIKE ZOOM","precio":40000,"imagen":"imagenes/759c57f1-032a-48f3-86c9-c4707fbc7be0.jpg","talles":["34","35","36","37","38","39","40","41","42","43","44","45","52"]},{"id":"448c1a79-8005-40e4-8cc5-137257656722","categoria":"Calzado","nombre":"FÚTBOL 11 NIKE","precio":40000,"imagen":"imagenes/699861af-6ced-484e-827e-8c5c9aeb4dae.jpg","talles":[]},{"id":"121c7acd-649e-4efd-ab10-a6fcfc263473","categoria":"Calzado","nombre":"PUMA FERRARI","precio":40000,"imagen":"imagenes/3c6d1282-8b18-4624-be1d-9db7033653c5.jpg","talles":["34","35","36","37","38","39","40","41","42","43","44","45","54"]},{"id":"a08909f8-37ec-4a08-9d8e-c0b262164a84","categoria":"Calzado","nombre":"BOTA CAT","precio":45000,"imagen":"imagenes/3efbc9a3-65e8-4cd0-9219-9cd8ed285e97.jpg","talles":["34","35","36","37","38","39","40","41","42","43","44","45","55"]}];
+let filteredProducts = [], currentCategory = "all", cart = {};
+function formatPrice(p){ let n=parseFloat(p); return isNaN(n)?"$0":"$"+n.toLocaleString('es-ES'); }
+function escapeHtml(s){ if(!s) return ""; return s.replace(/[&<>]/g,m=>m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
+function updateCartUI(){ document.getElementById("cartCount").innerText=Object.values(cart).reduce((s,i)=>s+i.cantidad,0); renderCartOffcanvas(); }
+function addToCart(id,nombre,precio,imagen,cant,talle){
+    if(cant<=0) return;
+    let key = talle ? id+"_"+talle : id;
+    if(cart[key]) cart[key].cantidad+=cant;
+    else cart[key]={idOriginal:id,nombre,precio,cantidad:cant,imagen,talle:talle};
+    updateCartUI();
+}
+function removeProductFromCart(key){ if(cart[key]){ delete cart[key]; updateCartUI(); } }
+function removeOneFromCart(key){ if(cart[key]){ if(cart[key].cantidad>1) cart[key].cantidad--; else delete cart[key]; updateCartUI(); } }
+function renderCartOffcanvas(){
+    let container=document.getElementById("cartItemsList"), items=Object.values(cart);
+    if(!items.length){ container.innerHTML='<div class="text-center text-gray-400">Vacío</div>'; document.getElementById("cartTotal").innerText=formatPrice(0); return; }
+    let html="", total=0;
+    for(let [key,item] of Object.entries(cart)){ let sub=item.precio*item.cantidad; total+=sub;
+        let talleInfo = item.talle ? " | Talle: "+escapeHtml(item.talle) : "";
+        html+=`<div class="flex gap-3 border-b pb-3 relative"><img src="${escapeHtml(item.imagen)}" class="w-16 h-16 object-cover rounded-lg"><div><h4 class="font-bold pr-6">${escapeHtml(item.nombre)}${talleInfo}</h4><div>Precio: ${formatPrice(item.precio)}</div><div>Cant: ${item.cantidad} | ${formatPrice(sub)}</div><button class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded remove-one-btn" data-key="${key}">Eliminar 1</button></div><button class="absolute top-0 right-0 text-red-500 font-bold text-lg remove-product-btn" data-key="${key}">✕</button></div>`;
+    }
+    container.innerHTML=html; document.getElementById("cartTotal").innerText=formatPrice(total);
+    document.querySelectorAll('.remove-one-btn').forEach(b=>b.addEventListener('click',()=>removeOneFromCart(b.dataset.key)));
+    document.querySelectorAll('.remove-product-btn').forEach(b=>b.addEventListener('click',()=>removeProductFromCart(b.dataset.key)));
+}
+function generateWhatsAppMessage(){
+    let items=Object.values(cart); if(!items.length) return null;
+    let msg=`¡Hola ${STORE_NAME}! Quisiera hacer un pedido:%0A%0A`, total=0;
+    items.forEach(i=>{ let sub=i.precio*i.cantidad; total+=sub;
+        let talleTexto = i.talle ? " (Talle: "+i.talle+")" : "";
+        msg+=`🔹 ${i.nombre}${talleTexto}%0A   Cantidad: ${i.cantidad} x ${formatPrice(i.precio)}%0A   Subtotal: ${formatPrice(sub)}%0A%0A`;
+    });
+    msg+=`   Total: ${formatPrice(total)}%0A%0AEspero tu confirmación. ¡Gracias!`;
+    return msg;
+}
+function sendWhatsApp(){ let m=generateWhatsAppMessage(); if(m) window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${m}`,'_blank'); else alert("Vacío"); }
+function openImageModal(src){ let m=document.getElementById("imageModal"); m.style.display="flex"; document.getElementById("modalImage").src=src; }
+function closeImageModal(){ document.getElementById("imageModal").style.display="none"; }
+function applyFiltersAndRender(){
+    let result = [...allProducts];
+    if(currentCategory!=="all") result=result.filter(p=>p.categoria===currentCategory);
+    filteredProducts=result;
+    let grid=document.getElementById("productsGrid");
+    if(!filteredProducts.length){ grid.innerHTML='<div class="col-span-full text-center py-12">Sin productos</div>'; return; }
+    let html="";
+    filteredProducts.forEach(p=>{ let qid=`qty_${p.id}`;
+        let talleSelectorHtml = "";
+        if(p.categoria.toLowerCase()==="calzado" && p.talles && p.talles.length>0){
+            let options = p.talles.map(t=>`<option value="${escapeHtml(t)}">Talle ${escapeHtml(t)}</option>`).join('');
+            talleSelectorHtml = `<div class="mt-2"><label class="text-xs text-gray-600">Talle:</label><select class="talle-select w-full mt-1" data-id="${p.id}" id="talle_${p.id}">${options}</select></div>`;
+        }
+        html+=`<div class="bg-white rounded-2xl border shadow-sm overflow-hidden flex flex-col"><div class="bg-gray-100 h-48 cursor-pointer overflow-hidden" onclick="openImageModal('${escapeHtml(p.imagen)}')"><img src="${escapeHtml(p.imagen)}" class="w-full h-full object-cover hover:scale-105 transition"></div><div class="p-5"><div class="flex justify-between items-start gap-2 mb-2"><h3 class="font-bold">${escapeHtml(p.nombre)}</h3><span class="bg-indigo-50 text-indigo-700 text-xs px-2 py-1 rounded-md">${escapeHtml(p.categoria)}</span></div><div class="font-black text-xl text-indigo-600">${formatPrice(p.precio)}</div>${talleSelectorHtml}<div class="flex items-center justify-between gap-2 mt-4"><div class="flex bg-gray-100 rounded-lg"><button class="qty-btn decr-qty" data-id="${p.id}">−</button><input type="number" id="${qid}" value="0" min="0" max="99" class="qty-input w-12 text-center bg-transparent"><button class="qty-btn incr-qty" data-id="${p.id}">+</button></div><button class="add-specific-btn bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-xl transition-colors" data-id="${p.id}" data-nombre="${escapeHtml(p.nombre)}" data-precio="${p.precio}" data-imagen="${escapeHtml(p.imagen)}">Agregar</button></div></div></div>`;
+    });
+    grid.innerHTML=html;
+    filteredProducts.forEach(p=>{
+        let inp=document.getElementById(`qty_${p.id}`);
+        let talleSelect = document.querySelector(`.talle-select[data-id="${p.id}"]`);
+        document.querySelector(`.incr-qty[data-id="${p.id}"]`)?.addEventListener('click',()=>{ let v=parseInt(inp.value)||0; if(v<99) inp.value=v+1; });
+        document.querySelector(`.decr-qty[data-id="${p.id}"]`)?.addEventListener('click',()=>{ let v=parseInt(inp.value)||0; if(v>0) inp.value=v-1; });
+        document.querySelector(`.add-specific-btn[data-id="${p.id}"]`)?.addEventListener('click',()=>{ let cant=parseInt(inp.value)||0; if(cant>0){ let talle = talleSelect ? talleSelect.value : null; addToCart(p.id, p.nombre, p.precio, p.imagen, cant, talle); inp.value=0; } });
+    });
+}
+function updateCategories(){
+    let cats=[...new Set(allProducts.map(p=>p.categoria))];
+    let cont=document.getElementById("categoriesFilter");
+    let allBtn=cont.querySelector('.cat-btn[data-cat="all"]');
+    cont.innerHTML=""; cont.appendChild(allBtn);
+    cats.forEach(c=>{ let btn=document.createElement('button'); btn.setAttribute('data-cat',c); btn.textContent=c; btn.className="cat-btn px-5 py-2.5 rounded-xl font-medium bg-gray-50 text-gray-600 hover:bg-gray-100"; cont.appendChild(btn); });
+    highlightActive();
+}
+function highlightActive(){ document.querySelectorAll('.cat-btn').forEach(b=>{ let v=b.dataset.cat; if((currentCategory==="all" && v==="all")||(currentCategory!=="all" && v===currentCategory)) b.classList.add('bg-indigo-600','text-white'); else b.classList.remove('bg-indigo-600','text-white'); }); }
+document.getElementById("categoriesFilter").addEventListener("click",e=>{ let b=e.target.closest(".cat-btn"); if(b){ currentCategory=b.dataset.cat; highlightActive(); applyFiltersAndRender(); } });
+document.getElementById("cartButton").addEventListener("click",()=>{ document.getElementById("cartOffcanvas").classList.add("open"); document.getElementById("offcanvasBackdrop").classList.add("show"); });
+document.getElementById("closeCartBtn").addEventListener("click",()=>{ document.getElementById("cartOffcanvas").classList.remove("open"); document.getElementById("offcanvasBackdrop").classList.remove("show"); });
+document.getElementById("offcanvasBackdrop").addEventListener("click",()=>{ document.getElementById("cartOffcanvas").classList.remove("open"); document.getElementById("offcanvasBackdrop").classList.remove("show"); });
+document.getElementById("whatsappBtn").addEventListener("click",sendWhatsApp);
+updateCategories(); applyFiltersAndRender();
+</script>
+</body>
+</html>
