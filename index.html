@@ -156,14 +156,22 @@
     }
     
     .product-card {
-      background: var(--bg-white);
-      border-radius: 1.5rem;
-      overflow: hidden;
-      border: 1px solid var(--border-light);
-      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-      display: flex;
-      flex-direction: column;
-      height: 100%;
+     background: var(--bg-white);
+     border-radius: 1.5rem;
+     overflow: hidden;
+     border: 1px solid var(--border-light);
+     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+     display: flex;
+     flex-direction: column;
+     height: 100%;
+     min-height: 400px;  ← Celular
+    }
+
+    @media (min-width: 1024px) {
+      .product-card {
+        min-height: 500px;  ← Desktop
+
+      }
     }
     
     .product-card:hover {
@@ -661,7 +669,7 @@
       <div id="categoriesFilter" class="category-filter"></div>
       
       <!-- PRODUCTS GRID -->
-      <div id="productsGrid" class="product-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+      <div id="productsGrid" class="product-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3"></div>
     </div>
   </main>
 </div>
@@ -703,7 +711,7 @@
 </div>
 
 <script>
-const STORE_NAME = "Jorgito's";
+const STORE_NAME = "Jorgito";
 const WHATSAPP_NUMBER = "543425517395";
 
 let allProducts = [{"id":"011b0701-7456-44aa-af35-917bda5b35f5","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SB JORDAN","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_7sWXbNC0Zx.png","talles":["39","40","41"]},{"id":"470624ad-c13b-4d5a-82f7-f5e3a2c970d9","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SB JORDAN","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_XfYcozN4f1.png","talles":["39","40","41"]},{"id":"90ccbd8f-033d-4fd2-b207-3ae7924d89d7","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SB JORDAN","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_qOsbiPPaRM.png","talles":["39","40","41"]},{"id":"05c0aea1-edae-487b-8b72-950e87a96ec6","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla JORDAN BOTITA","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_sbvJkK5Yxy.png","talles":["39","40","41"]},{"id":"e2865ea6-358d-4954-a113-9fb7de83899a","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SUPERNOVA","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_j3fqwdJIjd.png","talles":["38","40"]},{"id":"2dbdc86c-701f-4f67-84da-c1467d4ee359","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SUPERNOVA","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_YIJkEmh5DG.png","talles":["39","40","41"]},{"id":"10b732d8-d033-4dae-b02b-104455f67a6b","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla NIKE ZOOM","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_XfYcozN4f1.png","talles":["39","40","41"]},{"id":"fa59a567-4d31-42fa-983b-48e9f92919d4","categoria":"Calzados (Catálogo 1)","nombre":"FÚTBOL 11 NIKE","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_mi4cOGeQJ0.png","talles":["39","40","41"]},{"id":"c5f6c262-7b3c-461e-8703-fee603be5310","categoria":"Calzados (Catálogo 1)","nombre":"PUMA FERRARI","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_YEFCEBSrnL.png","talles":["38","39"]},{"id":"7b290dce-691d-442d-815a-6c11275fc1b4","categoria":"Calzados (Catálogo 1)","nombre":"BOTA CAT","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_BVad0InYol.png","talles":["41","42","43","44","45"]},{"id":"0c1a370d-c0a0-479a-a3f4-5bcc2a4478dd","categoria":"Calzados (Catálogo 1)","nombre":"ADIDAS KANADIA","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/chrome_UPqXc7mIln.png","talles":["42","43","44","45"]},{"id":"f98d8af6-5ab5-4732-bfa3-573a11926491","categoria":"Calzados (Catálogo 1)","nombre":"PUMA 181","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/chrome_EwUqa1V7yN.png","talles":["38","39","40","41","42"]},{"id":"5ac87a80-3240-4ca1-a225-eed86df01d6f","categoria":"Calzados (Catálogo 1)","nombre":"ADIDAS TENIS","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/chrome_7ukH51x8P1.png","talles":["34","35","36","37","38","39"]},{"id":"0371b588-f9f5-4a4a-a3c6-448355b128a5","categoria":"Calzados (Catálogo 1)","nombre":"FILA HEATING AZUL","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/chrome_7nx4cxRyjq.png","talles":["38","39","40","41","42","43"]},{"id":"664334d6-cb57-4c33-81a4-6e897190a67b","categoria":"Calzados (Catálogo 1)","nombre":"FILA HEATING NEGRA","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/chrome_GGm5XQHevi.png","talles":["38","39","40","41","42"]},{"id":"90481fe9-d66e-4320-bca9-d21c53a1f737","categoria":"Calzados  (Catálogo 2)","nombre":"Vans Hylane cream black","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/5127fe9a-5d99-4b9a-a73a-608acb6e8998.jpg","talles":["40.41"]},{"id":"45e263c3-49c1-4233-8d3e-660605130694","categoria":"Calzados  (Catálogo 2)","nombre":"Vans Upland total white","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/6255458d-278c-4357-a9e4-c076ec8dc30c.jpg","talles":["40.42"]},{"id":"2c16c410-0364-4e81-be3a-59d10ce551e0","categoria":"Calzados  (Catálogo 2)","nombre":"Puma 180 clasica","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/7ee20142-da93-4c34-9118-06967832eaa3.jpg","talles":["39","40","41","42"]},{"id":"f76499d0-d711-46bd-ad0f-3ce17eb3d15a","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas campus Beta marron","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/e54c6abf-a424-49a7-bf59-9feac24bd63d.jpg","talles":["34","35","36","37","38","39"]},{"id":"2cc90279-30fd-4d61-8373-97fa10c25a03","categoria":"Calzados  (Catálogo 2)","nombre":"New Balance 9060 total black","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/516f3931-3306-484b-a77b-6a5112a35e12.jpg","talles":["34","35","36","37","40"]},{"id":"d854d597-9e0f-4dab-b1ae-d5e66cb5c3df","categoria":"Calzados  (Catálogo 2)","nombre":"Ultra Range gris","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/23df31d5-1220-44b9-a208-58b40d8e1084.jpg","talles":["35","36","38","40"]},{"id":"fc57fd20-da30-47c6-98fd-1a93d36f99d0","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas 2000 verde","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/3c2e8f19-f015-4422-a59d-8a9753fb4b3d.jpg","talles":["34","36","37","38","40"]},{"id":"41ae8592-48ce-4161-afdf-fed7df7385b4","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas 2000 gris/blanco","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/fa0186a9-ad8f-4586-b4f6-dd22aaf92584.jpg","talles":["40","41","42"]},{"id":"103004e1-47b6-43f7-89db-4bbb4661ff31","categoria":"Calzados  (Catálogo 2)","nombre":"Samba black lineas blancas","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/d810c31a-cfb2-41e2-9fbd-015679eb88f1.jpg","talles":["34","35","36","37","38","39","40","41"]},{"id":"ac80488c-5846-4214-8805-13be94051237","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas Forum Grafito","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/a608bc96-e467-442a-8c3f-da7e215580b8.jpg","talles":["38","39","40","42","43"]},{"id":"fbb40b85-262d-4349-a9d0-d791c7220a3b","categoria":"Calzados  (Catálogo 2)","nombre":"didas Drop Step Low grafito","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/a3f9edf5-4b20-4040-b00c-4c9906ec4b57.jpg","talles":["39.4"]},{"id":"84dfe7cc-e7d8-49a8-9062-b3f95ac2c4cb","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas Super Nova negra y roja","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/47c13c8c-7806-4ded-af58-b8360ddf12e9.jpg","talles":["40"]},{"id":"d3eb6ad6-885b-4b88-9201-e4fdbe234a2a","categoria":"Notebooks","nombre":"Acer Nitro","descripcion":"Acer Nitro V 15 - 52- 57BB/ I5 / 15.6¨ / RTX 5050 / 16-512 GB - Negro - 512GB","oferta":"","precio":2150391,"imagen":"imgsNotebooks/Acer_Nitro_V_15_ANV15-51__1__03 - copia.jpg","talles":[]},{"id":"c4b08a39-951b-4928-b515-f972ce90b1aa","categoria":"Notebooks","nombre":"Acer Nitro","descripcion":"Acer Nitro V 15 I9/ 15.6¨/ W11/ RTX 5060/ 16 GB RAM/ 1 TB - 1TB","oferta":"","precio":3023321.9999999995,"imagen":"imgsNotebooks/Acer_Nitro_V_15_ANV15-51__1__03.jpg","talles":[]}];
