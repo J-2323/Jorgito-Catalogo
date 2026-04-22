@@ -8,959 +8,152 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
   <style>
     * { font-family: 'Sora', sans-serif; }
     h1, h2, h3, h4, h5, h6 { font-family: 'Space Grotesk', sans-serif; }
-    
-    :root {
-      --primary: #0F0F1E;
-      --primary-light: #1a1a2e;
-      --accent-cyan: #00D9FF;
-      --accent-magenta: #FF1B6D;
-      --accent-mint: #06D6A0;
-      --bg-light: #F8F8FB;
-      --bg-white: #FFFFFF;
-      --text-dark: #0F0F1E;
-      --text-gray: #4A4A4A;
-      --border-light: #E5E5F0;
-    }
-    
-    body {
-      background: linear-gradient(135deg, var(--bg-light) 0%, #F0E6FF 100%);
-      min-height: 100vh;
-      color: var(--text-dark);
-    }
-    
-    .header-gradient {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .header-gradient::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -10%;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(0, 217, 255, 0.1) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-    
-    .header-content {
-      position: relative;
-      z-index: 1;
-    }
-    
-    .logo-section {
-      background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-magenta) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .cart-btn {
-      background: linear-gradient(135deg, var(--accent-mint) 0%, var(--accent-cyan) 100%);
-      position: relative;
-      overflow: hidden;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 8px 24px rgba(6, 214, 160, 0.25);
-    }
-    
-    .cart-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(0, 217, 255, 0.35);
-    }
-    
-    .cart-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.2);
-      transition: left 0.5s;
-    }
-    
-    .cart-btn:hover::before {
-      left: 100%;
-    }
-    
-    .cart-count {
-      position: absolute;
-      -top-3;
-      -right-3;
-      background: linear-gradient(135deg, var(--accent-magenta) 0%, #FF6B9D 100%);
-      color: white;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 0.75rem;
-      box-shadow: 0 4px 12px rgba(255, 27, 109, 0.3);
-    }
-    
-    .category-filter {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      padding: 1.5rem;
-      background: var(--bg-white);
-      border-radius: 2rem;
-      border: 1px solid var(--border-light);
-      backdrop-filter: blur(10px);
-    }
-    
-    .cat-btn {
-      padding: 0.625rem 1.25rem;
-      border-radius: 1.5rem;
-      font-weight: 600;
-      font-size: 0.875rem;
-      border: 1px solid var(--border-light);
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      background: var(--bg-light);
-      color: var(--text-gray);
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .cat-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-magenta));
-      z-index: -1;
-      transition: left 0.3s;
-    }
-    
-    .cat-btn.active {
-      color: white;
-      border: none;
-      position: relative;
-      z-index: 1;
-    }
-    
-    .cat-btn.active::before {
-      left: 0;
-    }
-    
-    .product-card {
-     background: var(--bg-white);
-     border-radius: 1.5rem;
-     overflow: hidden;
-     border: 1px solid var(--border-light);
-     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-     display: flex;
-     flex-direction: column;
-     height: 100%;
-     min-height: 300px;  ← Celular
-    }
-
-    @media (min-width: 1024px) {
-      .product-card {
-        min-height: 450px;  ← Desktop
-
-      }
-    }
-    
-    .product-card:hover {
-      transform: translateY(-8px);
-      border-color: var(--accent-cyan);
-      box-shadow: 0 20px 40px rgba(0, 217, 255, 0.15);
-    }
-    
-    .product-image {
-      position: relative;
-      width: 100%;
-      height: 220px;
-      background: linear-gradient(135deg, #F0E6FF 0%, #E8F3FF 100%);
-      overflow: hidden;
-      cursor: pointer;
-    }
-    
-    .product-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    
-    .product-card:hover .product-image img {
-      transform: scale(1.08);
-    }
-    
-    .product-badge {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      padding: 0.5rem 0.875rem;
-      border-radius: 1rem;
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--accent-magenta);
-    }
-    
-    .product-content {
-      padding: 1.5rem;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-    
-    .product-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: start;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-    
-    .product-name {
-      font-weight: 700;
-      font-size: 1rem;
-      line-height: 1.4;
-      color: var(--text-dark);
-    }
-    
-    .product-category {
-      font-size: 0.7rem;
-      font-weight: 600;
-      padding: 0.375rem 0.75rem;
-      border-radius: 0.75rem;
-      background: linear-gradient(135deg, #E0F7FF, #F0E6FF);
-      color: var(--primary);
-    }
-    
-    .product-description {
-      font-size: 0.85rem;
-      color: var(--text-gray);
-      margin-bottom: 0.75rem;
-      line-height: 1.4;
-    }
-    
-    .oferta-badge {
-      background: linear-gradient(135deg, #FFF9E6 0%, #FFEFCC 100%);
-      color: #8B6914;
-      font-size: 0.8rem;
-      font-weight: 600;
-      padding: 0.625rem 0.875rem;
-      border-radius: 1rem;
-      margin: 0.75rem 0;
-      border-left: 3px solid #FFB800;
-      display: inline-block;
-    }
-    
-    .product-price {
-      font-size: 1.75rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--accent-magenta), var(--accent-cyan));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin: 1rem 0;
-    }
-    
-    .talle-selector {
-      margin: 1rem 0;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-    
-    .talle-selector label {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--text-gray);
-    }
-    
-    .talle-selector select {
-      padding: 0.75rem;
-      border: 1px solid var(--border-light);
-      border-radius: 1rem;
-      font-size: 0.875rem;
-      background: var(--bg-light);
-      color: var(--text-dark);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .talle-selector select:focus {
-      outline: none;
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
-    }
-    
-    .qty-control {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--bg-light);
-      border-radius: 1.25rem;
-      padding: 0.25rem;
-      border: 1px solid var(--border-light);
-    }
-    
-    .qty-btn {
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: transparent;
-      border: none;
-      cursor: pointer;
-      font-weight: 700;
-      color: var(--primary);
-      font-size: 1.2rem;
-      transition: all 0.2s;
-      border-radius: 1rem;
-    }
-    
-    .qty-btn:hover {
-      background: white;
-      color: var(--accent-magenta);
-    }
-    
-    .qty-input {
-      width: 50px;
-      text-align: center;
-      font-weight: 700;
-      background: transparent;
-      border: none;
-      font-size: 0.95rem;
-    }
-    
-    .add-btn {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-      color: white;
-      font-weight: 700;
-      padding: 0.875rem 1.5rem;
-      border-radius: 1.25rem;
-      border: none;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      margin-top: 1rem;
-      position: relative;
-      overflow: hidden;
-      font-size: 0.95rem;
-    }
-    
-    .add-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, rgba(0, 217, 255, 0.3), rgba(255, 27, 109, 0.3));
-      transition: left 0.3s;
-      z-index: 0;
-    }
-    
-    .add-btn span {
-      position: relative;
-      z-index: 1;
-    }
-    
-    .add-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 24px rgba(15, 15, 30, 0.25);
-    }
-    
-    .add-btn:hover::before {
-      left: 100%;
-    }
-    
-    .offcanvas {
-      position: fixed;
-      top: 0;
-      right: -450px;
-      width: 100%;
-      max-width: 450px;
-      height: 100vh;
-      background: white;
-      z-index: 1050;
-      transition: right 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      display: flex;
-      flex-direction: column;
-      box-shadow: -8px 0 32px rgba(0, 0, 0, 0.15);
-    }
-    
-    .offcanvas.open {
-      right: 0;
-    }
-    
-    .offcanvas-header {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-      color: white;
-      padding: 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid rgba(0, 217, 255, 0.2);
-    }
-    
-    .offcanvas-header h2 {
-      font-size: 1.5rem;
-      margin: 0;
-    }
-    
-    .close-btn {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.5rem;
-      cursor: pointer;
-      padding: 0.5rem;
-      transition: transform 0.2s;
-    }
-    
-    .close-btn:hover {
-      transform: scale(1.1);
-    }
-    
-    .cart-items {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1.5rem;
-    }
-    
-    .cart-item {
-      display: flex;
-      gap: 1rem;
-      border-bottom: 1px solid var(--border-light);
-      padding: 1.25rem 0;
-      position: relative;
-    }
-    
-    .cart-item:last-child {
-      border-bottom: none;
-    }
-    
-    .cart-item-image {
-      width: 80px;
-      height: 80px;
-      border-radius: 1rem;
-      object-fit: cover;
-      background: var(--bg-light);
-    }
-    
-    .cart-item-content {
-      flex: 1;
-    }
-    
-    .cart-item-title {
-      font-weight: 700;
-      margin-bottom: 0.25rem;
-      font-size: 0.95rem;
-    }
-    
-    .cart-item-price {
-      font-size: 0.85rem;
-      color: var(--accent-magenta);
-      font-weight: 600;
-    }
-    
-    .cart-item-qty {
-      font-size: 0.8rem;
-      color: var(--text-gray);
-      margin-top: 0.25rem;
-    }
-    
-    .remove-btn {
-      position: absolute;
-      top: 0;
-      right: 0;
-      background: rgba(255, 27, 109, 0.1);
-      border: none;
-      color: var(--accent-magenta);
-      width: 32px;
-      height: 32px;
-      border-radius: 0.75rem;
-      cursor: pointer;
-      font-weight: 700;
-      transition: all 0.2s;
-    }
-    
-    .remove-btn:hover {
-      background: var(--accent-magenta);
-      color: white;
-    }
-    
-    .empty-cart {
-      text-align: center;
-      color: var(--text-gray);
-      padding: 2rem;
-    }
-    
-    .cart-footer {
-      padding: 1.5rem;
-      border-top: 1px solid var(--border-light);
-    }
-    
-    .cart-info {
-      text-align: center;
-      font-size: 0.8rem;
-      color: var(--text-gray);
-      margin-bottom: 1rem;
-      padding: 0.75rem;
-      background: var(--bg-light);
-      border-radius: 1rem;
-    }
-    
-    .cart-total {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.25rem;
-      font-size: 1.25rem;
-      font-weight: 800;
-    }
-    
-    .cart-total span:last-child {
-      background: linear-gradient(135deg, var(--accent-magenta), var(--accent-cyan));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .whatsapp-btn {
-      width: 100%;
-      padding: 1rem;
-      background: linear-gradient(135deg, #25D366 0%, #06D6A0 100%);
-      color: white;
-      border: none;
-      border-radius: 1.25rem;
-      font-weight: 700;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 8px 24px rgba(37, 211, 102, 0.3);
-    }
-    
-    .whatsapp-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(37, 211, 102, 0.4);
-    }
-    
-    .offcanvas-backdrop {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      z-index: 1040;
-      display: none;
-      backdrop-filter: blur(4px);
-    }
-    
-    .offcanvas-backdrop.show {
-      display: block;
-    }
-    
-    .image-modal {
-      display: none;
-      position: fixed;
-      z-index: 1100;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.9);
-      cursor: pointer;
-      align-items: center;
-      justify-content: center;
-      backdrop-filter: blur(10px);
-    }
-    
-    .image-modal img {
-      max-width: 90%;
-      max-height: 90%;
-      object-fit: contain;
-      border-radius: 1.5rem;
-      animation: modalZoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    
-    @keyframes modalZoom {
-      from { transform: scale(0.8); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    
-    .modal-back-btn {
-      position: absolute;
-      top: 2rem;
-      left: 2rem;
-      z-index: 1101;
-      background: white;
-      color: black;
-      border-radius: 1.5rem;
-      padding: 0.75rem 1.5rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s;
-    }
-    
-    .modal-back-btn:hover {
-      background: var(--bg-light);
-    }
-    
-    @media (max-width: 768px) {
-      .offcanvas { max-width: 100%; }
-      .product-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
-    }
-    
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .product-card {
-      animation: fadeInUp 0.5s ease-out forwards;
-    }
+    :root { --primary: #0F0F1E; --primary-light: #1a1a2e; --accent-cyan: #00D9FF; --accent-magenta: #FF1B6D; --accent-mint: #06D6A0; --bg-light: #F8F8FB; --bg-white: #FFFFFF; --text-dark: #0F0F1E; --text-gray: #4A4A4A; --border-light: #E5E5F0; }
+    body { background: linear-gradient(135deg, var(--bg-light) 0%, #F0E6FF 100%); min-height: 100vh; color: var(--text-dark); }
+    .header-gradient { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); position: relative; overflow: hidden; }
+    .header-gradient::before { content: ''; position: absolute; top: -50%; right: -10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(0, 217, 255, 0.1) 0%, transparent 70%); border-radius: 50%; pointer-events: none; }
+    .header-content { position: relative; z-index: 1; }
+    .logo-section { background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-magenta) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .cart-btn { background: linear-gradient(135deg, var(--accent-mint) 0%, var(--accent-cyan) 100%); position: relative; overflow: visible; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 8px 24px rgba(6, 214, 160, 0.25); }
+    .cart-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0, 217, 255, 0.35); }
+    /* Se eliminó .cart-btn::before para evitar el rectángulo molesto */
+    .cart-count { position: absolute; top: -10px; right: -10px; background: linear-gradient(135deg, var(--accent-magenta) 0%, #FF6B9D 100%); color: white; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.7rem; box-shadow: 0 4px 12px rgba(255, 27, 109, 0.4); z-index: 10; pointer-events: none; }
+    .category-filter { display: flex; gap: 0.75rem; flex-wrap: wrap; padding: 1.5rem; background: var(--bg-white); border-radius: 2rem; border: 1px solid var(--border-light); backdrop-filter: blur(10px); }
+    .cat-btn { padding: 0.625rem 1.25rem; border-radius: 1.5rem; font-weight: 600; font-size: 0.875rem; border: 1px solid var(--border-light); transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); background: var(--bg-light); color: var(--text-gray); cursor: pointer; position: relative; overflow: hidden; }
+    .cat-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-magenta)); z-index: -1; transition: left 0.3s; }
+    .cat-btn.active { color: white; border: none; position: relative; z-index: 1; }
+    .cat-btn.active::before { left: 0; }
+    .product-card { background: var(--bg-white); border-radius: 1.5rem; overflow: hidden; border: 1px solid var(--border-light); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); display: flex; flex-direction: column; height: 100%; min-height: 400px; }
+    @media (min-width: 1024px) { .product-card { min-height: 500px; } }
+    .product-card:hover { transform: translateY(-8px); border-color: var(--accent-cyan); box-shadow: 0 20px 40px rgba(0, 217, 255, 0.15); }
+    .product-image { position: relative; width: 100%; height: 220px; background: linear-gradient(135deg, #F0E6FF 0%, #E8F3FF 100%); overflow: hidden; cursor: pointer; }
+    .product-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .product-card:hover .product-image img { transform: scale(1.08); }
+    .product-badge { position: absolute; top: 1rem; right: 1rem; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 0.5rem 0.875rem; border-radius: 1rem; font-size: 0.75rem; font-weight: 600; color: var(--accent-magenta); }
+    .product-content { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+    .product-header { display: flex; justify-content: space-between; align-items: start; gap: 1rem; margin-bottom: 1rem; }
+    .product-name { font-weight: 700; font-size: 1rem; line-height: 1.4; color: var(--text-dark); }
+    .product-description { font-size: 0.85rem; color: var(--text-gray); margin-bottom: 0.75rem; line-height: 1.4; }
+    .oferta-badge { background: linear-gradient(135deg, #FFF9E6 0%, #FFEFCC 100%); color: #8B6914; font-size: 0.8rem; font-weight: 600; padding: 0.625rem 0.875rem; border-radius: 1rem; margin: 0.75rem 0; border-left: 3px solid #FFB800; display: inline-block; }
+    .product-price { font-size: 1.75rem; font-weight: 800; background: linear-gradient(135deg, var(--accent-magenta), var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 1rem 0; }
+    .talle-selector { margin: 1rem 0; display: flex; flex-direction: column; gap: 0.5rem; }
+    .talle-selector label { font-size: 0.8rem; font-weight: 600; color: var(--text-gray); }
+    .talle-selector select { padding: 0.75rem; border: 1px solid var(--border-light); border-radius: 1rem; font-size: 0.875rem; background: var(--bg-light); color: var(--text-dark); cursor: pointer; transition: all 0.2s; }
+    .talle-selector select:focus { outline: none; border-color: var(--accent-cyan); box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1); }
+    .qty-control { display: flex; align-items: center; gap: 0.5rem; background: var(--bg-light); border-radius: 1.25rem; padding: 0.25rem; border: 1px solid var(--border-light); }
+    .qty-btn { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer; font-weight: 700; color: var(--primary); font-size: 1.2rem; transition: all 0.2s; border-radius: 1rem; }
+    .qty-btn:hover { background: white; color: var(--accent-magenta); }
+    .qty-input { width: 50px; text-align: center; font-weight: 700; background: transparent; border: none; font-size: 0.95rem; }
+    .add-btn { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: white; font-weight: 700; padding: 0.875rem 1.5rem; border-radius: 1.25rem; border: none; cursor: pointer; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); margin-top: 1rem; position: relative; overflow: hidden; font-size: 0.95rem; }
+    .add-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, rgba(0, 217, 255, 0.3), rgba(255, 27, 109, 0.3)); transition: left 0.3s; z-index: 0; }
+    .add-btn span { position: relative; z-index: 1; }
+    .add-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(15, 15, 30, 0.25); }
+    .add-btn:hover::before { left: 100%; }
+    .offcanvas { position: fixed; top: 0; right: -450px; width: 100%; max-width: 450px; height: 100vh; background: white; z-index: 1050; transition: right 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); display: flex; flex-direction: column; box-shadow: -8px 0 32px rgba(0, 0, 0, 0.15); }
+    .offcanvas.open { right: 0; }
+    .offcanvas-header { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: white; padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0, 217, 255, 0.2); }
+    .offcanvas-header h2 { font-size: 1.5rem; margin: 0; }
+    .close-btn { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; padding: 0.5rem; transition: transform 0.2s; }
+    .close-btn:hover { transform: scale(1.1); }
+    .cart-items { flex: 1; overflow-y: auto; padding: 1.5rem; }
+    .cart-item { display: flex; gap: 1rem; border-bottom: 1px solid var(--border-light); padding: 1.25rem 0; position: relative; }
+    .cart-item:last-child { border-bottom: none; }
+    .cart-item-image { width: 80px; height: 80px; border-radius: 1rem; object-fit: cover; background: var(--bg-light); }
+    .cart-item-content { flex: 1; }
+    .cart-item-title { font-weight: 700; margin-bottom: 0.25rem; font-size: 0.95rem; }
+    .cart-item-price { font-size: 0.85rem; color: var(--accent-magenta); font-weight: 600; }
+    .cart-item-qty { font-size: 0.8rem; color: var(--text-gray); margin-top: 0.25rem; }
+    .remove-btn { background: rgba(255, 27, 109, 0.1); border: none; color: var(--accent-magenta); width: 32px; height: 32px; border-radius: 0.75rem; cursor: pointer; font-weight: 700; transition: all 0.2s; }
+    .remove-btn:hover { background: var(--accent-magenta); color: white; }
+    .empty-cart { text-align: center; color: var(--text-gray); padding: 2rem; }
+    .cart-footer { padding: 1.5rem; border-top: 1px solid var(--border-light); }
+    .cart-info { text-align: center; font-size: 0.8rem; color: var(--text-gray); margin-bottom: 1rem; padding: 0.75rem; background: var(--bg-light); border-radius: 1rem; }
+    .cart-total { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; font-size: 1.25rem; font-weight: 800; }
+    .cart-total span:last-child { background: linear-gradient(135deg, var(--accent-magenta), var(--accent-cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .whatsapp-btn { width: 100%; padding: 1rem; background: linear-gradient(135deg, #25D366 0%, #06D6A0 100%); color: white; border: none; border-radius: 1.25rem; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 8px 24px rgba(37, 211, 102, 0.3); }
+    .whatsapp-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(37, 211, 102, 0.4); }
+    .offcanvas-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); z-index: 1040; display: none; backdrop-filter: blur(4px); }
+    .offcanvas-backdrop.show { display: block; }
+    .image-modal { display: none; position: fixed; z-index: 1100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); cursor: pointer; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+    .image-modal img { max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 1.5rem; animation: modalZoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    @keyframes modalZoom { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .modal-back-btn { position: absolute; top: 2rem; left: 2rem; z-index: 1101; background: white; color: black; border-radius: 1.5rem; padding: 0.75rem 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3); cursor: pointer; border: none; transition: all 0.2s; }
+    .modal-back-btn:hover { background: var(--bg-light); }
+    @media (max-width: 768px) { .offcanvas { max-width: 100%; } .product-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .product-card { animation: fadeInUp 0.5s ease-out forwards; }
   </style>
 </head>
 <body>
-
 <div class="min-h-screen pb-24">
-  <!-- HEADER -->
   <header class="header-gradient text-white sticky top-0 z-40">
     <div class="header-content max-w-7xl mx-auto px-4 py-6">
       <div class="flex justify-between items-center">
-        <div>
-          <h1 class="text-4xl font-black logo-section">Jorgito</h1>
-          <p class="text-sm text-white/60 mt-1">Catálogo de Artículos</p>
-        </div>
+        <div><h1 class="text-4xl font-black logo-section">Jorgito</h1><p class="text-sm text-white/60 mt-1">Catálogo de Artículos</p></div>
         <button id="cartButton" class="cart-btn text-white font-bold py-3 px-8 rounded-2xl flex items-center gap-3 relative">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M16 10a4 4 0 0 1-8 0"></path>
-            <path d="M3.103 6.034h17.794"></path>
-            <path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"></path>
-          </svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 10a4 4 0 0 1-8 0"></path><path d="M3.103 6.034h17.794"></path><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"></path></svg>
           <span>Carrito</span>
           <span id="cartCount" class="cart-count">0</span>
         </button>
       </div>
     </div>
   </header>
-
-  <!-- MAIN CONTENT -->
   <main class="max-w-7xl mx-auto px-4 py-12">
     <div class="space-y-8">
-      <!-- FILTERS -->
       <div id="categoriesFilter" class="category-filter"></div>
-      
-      <!-- PRODUCTS GRID -->
-      <div id="productsGrid" class="product-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3"></div>
+      <div id="productsGrid" class="product-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
     </div>
   </main>
 </div>
-
-<!-- CART OFFCANVAS -->
-<div id="cartOffcanvas" class="offcanvas">
-  <div class="offcanvas-header">
-    <button id="backFromCartBtn" class="text-white flex items-center gap-2 font-bold">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M15 19l-7-7 7-7"></path>
-      </svg>
-      Volver
-    </button>
-    <h2>🛒 Tu Carrito</h2>
-    <button id="closeCartBtn" class="close-btn">×</button>
-  </div>
-  
-  <div id="cartItemsList" class="cart-items"></div>
-  
-  <div class="cart-footer">
-    <div class="cart-info">
-      📝 Atención personalizada para coordinar el pedido
-    </div>
-    <div class="cart-total">
-      <span>Total:</span>
-      <span id="cartTotal">$0</span>
-    </div>
-    <button id="whatsappBtn" class="whatsapp-btn">💬 Enviar al WhatsApp</button>
-  </div>
-</div>
-
-<!-- BACKDROP -->
+<div id="cartOffcanvas" class="offcanvas"><div class="offcanvas-header"><button id="backFromCartBtn" class="text-white flex items-center gap-2 font-bold"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7"></path></svg>Volver</button><h2>🛒 Tu Carrito</h2><button id="closeCartBtn" class="close-btn">×</button></div><div id="cartItemsList" class="cart-items"></div><div class="cart-footer"><div class="cart-info">📝 Atención personalizada para coordinar el pedido</div><div class="cart-total"><span>Total:</span><span id="cartTotal">$0</span></div><button id="whatsappBtn" class="whatsapp-btn">💬 Enviar al WhatsApp</button></div></div>
 <div id="offcanvasBackdrop" class="offcanvas-backdrop"></div>
-
-<!-- IMAGE MODAL -->
-<div id="imageModal" class="image-modal" onclick="closeImageModal()">
-  <button id="closeModalBtn" class="modal-back-btn">← Volver</button>
-  <img id="modalImage" alt="Producto">
-</div>
-
+<div id="imageModal" class="image-modal" onclick="closeImageModal()"><button id="closeModalBtn" class="modal-back-btn">← Volver</button><img id="modalImage" alt="Producto"></div>
 <script>
 const STORE_NAME = "Jorgito";
 const WHATSAPP_NUMBER = "543425517395";
-
-let allProducts = [{"id":"011b0701-7456-44aa-af35-917bda5b35f5","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SB JORDAN","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_7sWXbNC0Zx.png","talles":["39","40","41"]},{"id":"470624ad-c13b-4d5a-82f7-f5e3a2c970d9","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SB JORDAN","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_XfYcozN4f1.png","talles":["39","40","41"]},{"id":"90ccbd8f-033d-4fd2-b207-3ae7924d89d7","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SB JORDAN","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_qOsbiPPaRM.png","talles":["39","40","41"]},{"id":"05c0aea1-edae-487b-8b72-950e87a96ec6","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla JORDAN BOTITA","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_sbvJkK5Yxy.png","talles":["39","40","41"]},{"id":"e2865ea6-358d-4954-a113-9fb7de83899a","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SUPERNOVA","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_j3fqwdJIjd.png","talles":["38","40"]},{"id":"2dbdc86c-701f-4f67-84da-c1467d4ee359","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SUPERNOVA","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_YIJkEmh5DG.png","talles":["39","40","41"]},{"id":"10b732d8-d033-4dae-b02b-104455f67a6b","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla NIKE ZOOM","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_XfYcozN4f1.png","talles":["39","40","41"]},{"id":"fa59a567-4d31-42fa-983b-48e9f92919d4","categoria":"Calzados (Catálogo 1)","nombre":"FÚTBOL 11 NIKE","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_mi4cOGeQJ0.png","talles":["39","40","41"]},{"id":"c5f6c262-7b3c-461e-8703-fee603be5310","categoria":"Calzados (Catálogo 1)","nombre":"PUMA FERRARI","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_YEFCEBSrnL.png","talles":["38","39"]},{"id":"7b290dce-691d-442d-815a-6c11275fc1b4","categoria":"Calzados (Catálogo 1)","nombre":"BOTA CAT","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_BVad0InYol.png","talles":["41","42","43","44","45"]},{"id":"0c1a370d-c0a0-479a-a3f4-5bcc2a4478dd","categoria":"Calzados (Catálogo 1)","nombre":"ADIDAS KANADIA","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/chrome_UPqXc7mIln.png","talles":["42","43","44","45"]},{"id":"f98d8af6-5ab5-4732-bfa3-573a11926491","categoria":"Calzados (Catálogo 1)","nombre":"PUMA 181","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/chrome_EwUqa1V7yN.png","talles":["38","39","40","41","42"]},{"id":"5ac87a80-3240-4ca1-a225-eed86df01d6f","categoria":"Calzados (Catálogo 1)","nombre":"ADIDAS TENIS","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/chrome_7ukH51x8P1.png","talles":["34","35","36","37","38","39"]},{"id":"0371b588-f9f5-4a4a-a3c6-448355b128a5","categoria":"Calzados (Catálogo 1)","nombre":"FILA HEATING AZUL","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/chrome_7nx4cxRyjq.png","talles":["38","39","40","41","42","43"]},{"id":"664334d6-cb57-4c33-81a4-6e897190a67b","categoria":"Calzados (Catálogo 1)","nombre":"FILA HEATING NEGRA","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/chrome_GGm5XQHevi.png","talles":["38","39","40","41","42"]},{"id":"90481fe9-d66e-4320-bca9-d21c53a1f737","categoria":"Calzados  (Catálogo 2)","nombre":"Vans Hylane cream black","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/5127fe9a-5d99-4b9a-a73a-608acb6e8998.jpg","talles":["40.41"]},{"id":"45e263c3-49c1-4233-8d3e-660605130694","categoria":"Calzados  (Catálogo 2)","nombre":"Vans Upland total white","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/6255458d-278c-4357-a9e4-c076ec8dc30c.jpg","talles":["40.42"]},{"id":"2c16c410-0364-4e81-be3a-59d10ce551e0","categoria":"Calzados  (Catálogo 2)","nombre":"Puma 180 clasica","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/7ee20142-da93-4c34-9118-06967832eaa3.jpg","talles":["39","40","41","42"]},{"id":"f76499d0-d711-46bd-ad0f-3ce17eb3d15a","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas campus Beta marron","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/e54c6abf-a424-49a7-bf59-9feac24bd63d.jpg","talles":["34","35","36","37","38","39"]},{"id":"2cc90279-30fd-4d61-8373-97fa10c25a03","categoria":"Calzados  (Catálogo 2)","nombre":"New Balance 9060 total black","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/516f3931-3306-484b-a77b-6a5112a35e12.jpg","talles":["34","35","36","37","40"]},{"id":"d854d597-9e0f-4dab-b1ae-d5e66cb5c3df","categoria":"Calzados  (Catálogo 2)","nombre":"Ultra Range gris","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/23df31d5-1220-44b9-a208-58b40d8e1084.jpg","talles":["35","36","38","40"]},{"id":"fc57fd20-da30-47c6-98fd-1a93d36f99d0","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas 2000 verde","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/3c2e8f19-f015-4422-a59d-8a9753fb4b3d.jpg","talles":["34","36","37","38","40"]},{"id":"41ae8592-48ce-4161-afdf-fed7df7385b4","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas 2000 gris/blanco","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/fa0186a9-ad8f-4586-b4f6-dd22aaf92584.jpg","talles":["40","41","42"]},{"id":"103004e1-47b6-43f7-89db-4bbb4661ff31","categoria":"Calzados  (Catálogo 2)","nombre":"Samba black lineas blancas","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/d810c31a-cfb2-41e2-9fbd-015679eb88f1.jpg","talles":["34","35","36","37","38","39","40","41"]},{"id":"ac80488c-5846-4214-8805-13be94051237","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas Forum Grafito","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/a608bc96-e467-442a-8c3f-da7e215580b8.jpg","talles":["38","39","40","42","43"]},{"id":"fbb40b85-262d-4349-a9d0-d791c7220a3b","categoria":"Calzados  (Catálogo 2)","nombre":"didas Drop Step Low grafito","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/a3f9edf5-4b20-4040-b00c-4c9906ec4b57.jpg","talles":["39.4"]},{"id":"84dfe7cc-e7d8-49a8-9062-b3f95ac2c4cb","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas Super Nova negra y roja","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/47c13c8c-7806-4ded-af58-b8360ddf12e9.jpg","talles":["40"]},{"id":"d3eb6ad6-885b-4b88-9201-e4fdbe234a2a","categoria":"Notebooks","nombre":"Acer Nitro","descripcion":"Acer Nitro V 15 - 52- 57BB/ I5 / 15.6¨ / RTX 5050 / 16-512 GB - Negro - 512GB","oferta":"","precio":2150391,"imagen":"imgsNotebooks/Acer_Nitro_V_15_ANV15-51__1__03 - copia.jpg","talles":[]},{"id":"c4b08a39-951b-4928-b515-f972ce90b1aa","categoria":"Notebooks","nombre":"Acer Nitro","descripcion":"Acer Nitro V 15 I9/ 15.6¨/ W11/ RTX 5060/ 16 GB RAM/ 1 TB - 1TB","oferta":"","precio":3023321.9999999995,"imagen":"imgsNotebooks/Acer_Nitro_V_15_ANV15-51__1__03.jpg","talles":[]}];
-
+let allProducts = [{"id":"c50ed5ba-966c-4898-9898-879751adb05d","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SB JORDAN","descripcion":"","oferta":"","precio":39875,"imagen":"imagenes/Photos_7sWXbNC0Zx.png","talles":["39","40","41"]},{"id":"548d202a-a77e-4dbe-9dc8-2a72706961ce","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SB JORDAN","descripcion":"","oferta":"","precio":39875,"imagen":"imagenes/Photos_XfYcozN4f1.png","talles":["39","40","41"]},{"id":"1e803be9-f84b-4d74-98cf-de6f62403fa1","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SB JORDAN","descripcion":"","oferta":"","precio":39875,"imagen":"imagenes/Photos_qOsbiPPaRM.png","talles":["39","40","41"]},{"id":"c7467cb8-06d7-4276-a56c-9a2d620cfa37","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla JORDAN BOTITA","descripcion":"","oferta":"","precio":39875,"imagen":"imagenes/Photos_sbvJkK5Yxy.png","talles":["39","40","41"]},{"id":"ff37d10c-3aa3-4ea0-acba-14b1fdd37a35","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SUPERNOVA","descripcion":"","oferta":"","precio":37375,"imagen":"imagenes/Photos_j3fqwdJIjd.png","talles":["38","40"]},{"id":"d1230052-c1a5-462f-ad29-11989fc8729d","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SUPERNOVA","descripcion":"","oferta":"","precio":37375,"imagen":"imagenes/Photos_YIJkEmh5DG.png","talles":["39","40","41"]},{"id":"fabc1635-de8a-4e14-8a7b-05827f69caaa","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla NIKE ZOOM","descripcion":"","oferta":"","precio":33000,"imagen":"imagenes/Photos_XfYcozN4f1.png","talles":["39","40","41"]},{"id":"6407a115-0101-4231-908e-e9634d46c906","categoria":"Calzados (Catálogo 1)","nombre":"FÚTBOL 11 NIKE","descripcion":"","oferta":"","precio":33000,"imagen":"imagenes/Photos_mi4cOGeQJ0.png","talles":["39","40","41"]},{"id":"7ed89b97-da5c-4c46-b6c6-94296ea0cd9f","categoria":"Calzados (Catálogo 1)","nombre":"PUMA FERRARI","descripcion":"","oferta":"","precio":31750,"imagen":"imagenes/Photos_YEFCEBSrnL.png","talles":["38","39"]},{"id":"ae60bb47-8263-4d58-bcab-46f265a99bcb","categoria":"Calzados (Catálogo 1)","nombre":"BOTA CAT","descripcion":"","oferta":"","precio":35500,"imagen":"imagenes/Photos_BVad0InYol.png","talles":["41","42","43","44","45"]},{"id":"da6f4e1d-2fb3-45a0-b700-78a85305d2b3","categoria":"Calzados (Catálogo 1)","nombre":"ADIDAS KANADIA","descripcion":"","oferta":"","precio":34250,"imagen":"imagenes/chrome_UPqXc7mIln.png","talles":["42","43","44","45"]},{"id":"5098f40e-ac91-4574-b4b5-91572d299967","categoria":"Calzados (Catálogo 1)","nombre":"PUMA 181","descripcion":"","oferta":"","precio":46750,"imagen":"imagenes/chrome_EwUqa1V7yN.png","talles":["38","39","40","41","42"]},{"id":"308763be-5146-4cb5-95d3-3f57d23331c5","categoria":"Calzados (Catálogo 1)","nombre":"ADIDAS TENIS","descripcion":"","oferta":"","precio":31750,"imagen":"imagenes/chrome_7ukH51x8P1.png","talles":["34","35","36","37","38","39"]},{"id":"439a6ce0-1295-4185-a202-12551899cece","categoria":"Calzados (Catálogo 1)","nombre":"FILA HEATING AZUL","descripcion":"","oferta":"","precio":34250,"imagen":"imagenes/chrome_7nx4cxRyjq.png","talles":["38","39","40","41","42","43"]},{"id":"62b96743-1d59-423f-98e8-dce9ff726ca8","categoria":"Calzados (Catálogo 1)","nombre":"FILA HEATING NEGRA","descripcion":"","oferta":"","precio":34250,"imagen":"imagenes/chrome_GGm5XQHevi.png","talles":["38","39","40","41","42"]},{"id":"162ce1d1-985d-4313-bb7d-ba77c23da323","categoria":"Calzados  (Catálogo 2)","nombre":"Vans Hylane cream black","descripcion":"","oferta":"","precio":45500,"imagen":"imagenes2/5127fe9a-5d99-4b9a-a73a-608acb6e8998.jpg","talles":["40.41"]},{"id":"98286f1f-5e73-4196-9fda-2d5b345e2b52","categoria":"Calzados  (Catálogo 2)","nombre":"Vans Upland total white","descripcion":"","oferta":"","precio":45500,"imagen":"imagenes2/6255458d-278c-4357-a9e4-c076ec8dc30c.jpg","talles":["40.42"]},{"id":"5c51c977-2c9e-498b-9b83-39b1b048c2d9","categoria":"Calzados  (Catálogo 2)","nombre":"Puma 180 clasica","descripcion":"","oferta":"","precio":50099.99999999999,"imagen":"imagenes2/7ee20142-da93-4c34-9118-06967832eaa3.jpg","talles":["39","40","41","42"]},{"id":"c4099d6f-5c10-4bfa-a88a-33cd3ab13e42","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas campus Beta marron","descripcion":"","oferta":"","precio":50099.99999999999,"imagen":"imagenes2/e54c6abf-a424-49a7-bf59-9feac24bd63d.jpg","talles":["34","35","36","37","38","39"]},{"id":"2774ad97-8e3d-4846-a71d-9b272b16ca0f","categoria":"Calzados  (Catálogo 2)","nombre":"New Balance 9060 total black","descripcion":"","oferta":"","precio":50099.99999999999,"imagen":"imagenes2/516f3931-3306-484b-a77b-6a5112a35e12.jpg","talles":["34","35","36","37","40"]},{"id":"ca72464f-b883-4bc7-bd5d-21131ff4794e","categoria":"Calzados  (Catálogo 2)","nombre":"Ultra Range gris","descripcion":"","oferta":"","precio":50099.99999999999,"imagen":"imagenes2/23df31d5-1220-44b9-a208-58b40d8e1084.jpg","talles":["35","36","38","40"]},{"id":"12295b12-ec43-498f-8dd1-c582c6292d2a","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas 2000 verde","descripcion":"","oferta":"","precio":50099.99999999999,"imagen":"imagenes2/3c2e8f19-f015-4422-a59d-8a9753fb4b3d.jpg","talles":["34","36","37","38","40"]},{"id":"ad35fa6c-52a1-4f7e-8474-14e10aee709d","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas 2000 gris/blanco","descripcion":"","oferta":"","precio":50099.99999999999,"imagen":"imagenes2/fa0186a9-ad8f-4586-b4f6-dd22aaf92584.jpg","talles":["40","41","42"]},{"id":"7fa82a7c-d7f7-4832-a00f-2c7d1e1f7891","categoria":"Calzados  (Catálogo 2)","nombre":"Samba black lineas blancas","descripcion":"","oferta":"","precio":45500,"imagen":"imagenes2/d810c31a-cfb2-41e2-9fbd-015679eb88f1.jpg","talles":["34","35","36","37","38","39","40","41"]},{"id":"541887bf-ca5f-4e2a-92e9-642f0bbe0679","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas Forum Grafito","descripcion":"","oferta":"","precio":50099.99999999999,"imagen":"imagenes2/a608bc96-e467-442a-8c3f-da7e215580b8.jpg","talles":["38","39","40","42","43"]},{"id":"76c1c081-14b6-41bb-a4d6-c1cf110392f2","categoria":"Calzados  (Catálogo 2)","nombre":"didas Drop Step Low grafito","descripcion":"","oferta":"","precio":50099.99999999999,"imagen":"imagenes2/a3f9edf5-4b20-4040-b00c-4c9906ec4b57.jpg","talles":["39.4"]},{"id":"2cbc2f80-8efa-4f2e-9957-a61d1d6d07dd","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas Super Nova negra y roja","descripcion":"","oferta":"","precio":45500,"imagen":"imagenes2/47c13c8c-7806-4ded-af58-b8360ddf12e9.jpg","talles":["40"]},{"id":"d8ed3e27-94aa-41c0-b994-adc66e95ddce","categoria":"Notebooks","nombre":"Acer Nitro","descripcion":"Acer Nitro V 15 - 52- 57BB/ I5 /\n15.6¨ / RTX 5050 / 16-512 GB -\nNegro - 512GB","oferta":"","precio":2150391,"imagen":"imgsNotebooks/Acer_Nitro_V_15_ANV15-51__1__03 - copia.jpg","talles":[]},{"id":"e31468b8-d19d-4c27-9d8a-b493032d9c16","categoria":"Notebooks","nombre":"Acer Nitro","descripcion":"Acer Nitro V 15 I9/ 15.6¨/ W11/ RTX\n5060/ 16 GB RAM/ 1 TB - 1TB","oferta":"","precio":3023321.9999999995,"imagen":"imgsNotebooks/Acer_Nitro_V_15_ANV15-51__1__03.jpg","talles":[]}];
 let filteredProducts = [], currentCategory = "all", cart = {};
-
-function formatPrice(p) {
-  let n = parseFloat(p);
-  return isNaN(n) ? "$0" : "$" + n.toLocaleString('es-ES');
-}
-
-function escapeHtml(s) {
-  if (!s) return "";
-  return s.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
-}
-
-function updateCartUI() {
-  document.getElementById("cartCount").innerText = Object.values(cart).reduce((s, i) => s + i.cantidad, 0);
-  renderCartOffcanvas();
-}
-
-function addToCart(id, nombre, precio, imagen, cant, talle) {
-  if (cant <= 0) return;
-  let key = talle ? id + "_" + talle : id;
-  if (cart[key]) cart[key].cantidad += cant;
-  else cart[key] = { idOriginal: id, nombre, precio, cantidad: cant, imagen, talle: talle };
-  updateCartUI();
-}
-
-function removeProductFromCart(key) {
-  if (cart[key]) { delete cart[key]; updateCartUI(); }
-}
-
-function removeOneFromCart(key) {
-  if (cart[key]) {
-    if (cart[key].cantidad > 1) cart[key].cantidad--;
-    else delete cart[key];
-    updateCartUI();
-  }
-}
-
+function formatPrice(p) { let n = parseFloat(p); return isNaN(n) ? "$0" : "$" + n.toLocaleString('es-ES'); }
+function escapeHtml(s) { if (!s) return ""; return s.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'); }
+function updateCartUI() { document.getElementById("cartCount").innerText = Object.values(cart).reduce((s, i) => s + i.cantidad, 0); renderCartOffcanvas(); }
+function addToCart(id, nombre, precio, imagen, cant, talle) { if (cant <= 0) return; let key = talle ? id + "_" + talle : id; if (cart[key]) cart[key].cantidad += cant; else cart[key] = { idOriginal: id, nombre, precio, cantidad: cant, imagen, talle: talle }; updateCartUI(); }
+function removeProductFromCart(key) { if (cart[key]) { delete cart[key]; updateCartUI(); } }
+function removeOneFromCart(key) { if (cart[key]) { if (cart[key].cantidad > 1) cart[key].cantidad--; else delete cart[key]; updateCartUI(); } }
 function renderCartOffcanvas() {
   let container = document.getElementById("cartItemsList"), items = Object.values(cart);
-  if (!items.length) {
-    container.innerHTML = '<div class="empty-cart">🛒 Tu carrito está vacío</div>';
-    document.getElementById("cartTotal").innerText = formatPrice(0);
-    return;
-  }
+  if (!items.length) { container.innerHTML = '<div class="empty-cart">🛒 Tu carrito está vacío</div>'; document.getElementById("cartTotal").innerText = formatPrice(0); return; }
   let html = "", total = 0;
-  for (let [key, item] of Object.entries(cart)) {
-    let sub = item.precio * item.cantidad;
-    total += sub;
-    let talleInfo = item.talle ? " | Talle: " + escapeHtml(item.talle) : "";
-    html += `<div class="cart-item">
-      <img src="${escapeHtml(item.imagen)}" class="cart-item-image" alt="${escapeHtml(item.nombre)}">
-      <div class="cart-item-content">
-        <div class="cart-item-title">${escapeHtml(item.nombre)}${talleInfo}</div>
-        <div class="cart-item-price">${formatPrice(item.precio)}</div>
-        <div class="cart-item-qty">Cantidad: ${item.cantidad} × ${formatPrice(sub)}</div>
-        <button class="remove-btn remove-one-btn" data-key="${key}">−</button>
-      </div>
-      <button class="remove-btn" style="position: static;" data-key="${key}" onclick="removeProductFromCart('${key}'); updateCartUI();">✕</button>
-    </div>`;
-  }
-  container.innerHTML = html;
-  document.getElementById("cartTotal").innerText = formatPrice(total);
+  for (let [key, item] of Object.entries(cart)) { let sub = item.precio * item.cantidad; total += sub; let talleInfo = item.talle ? " | Talle: " + escapeHtml(item.talle) : ""; html += `<div class="cart-item"><img src="${escapeHtml(item.imagen)}" class="cart-item-image"><div class="cart-item-content"><div class="cart-item-title">${escapeHtml(item.nombre)}${talleInfo}</div><div class="cart-item-price">${formatPrice(item.precio)}</div><div class="cart-item-qty">Cantidad: ${item.cantidad} × ${formatPrice(sub)}</div><button class="remove-btn remove-one-btn" data-key="${key}">−</button></div><button class="remove-btn remove-product-btn" data-key="${key}" style="position: absolute; top: 1rem; right: 0;">✕</button></div>`; }
+  container.innerHTML = html; document.getElementById("cartTotal").innerText = formatPrice(total);
   document.querySelectorAll('.remove-one-btn').forEach(b => b.addEventListener('click', () => removeOneFromCart(b.dataset.key)));
+  document.querySelectorAll('.remove-product-btn').forEach(b => b.addEventListener('click', () => removeProductFromCart(b.dataset.key)));
 }
-
-function generateWhatsAppMessage() {
-  let items = Object.values(cart);
-  if (!items.length) return null;
-  let msg = `¡Hola ${STORE_NAME}! Quisiera hacer un pedido:%0A%0A`, total = 0;
-  items.forEach(i => {
-    let sub = i.precio * i.cantidad;
-    total += sub;
-    let talleTexto = i.talle ? " (Talle: " + i.talle + ")" : "";
-    msg += `🔹 ${i.nombre}${talleTexto}%0A   Cantidad: ${i.cantidad} x ${formatPrice(i.precio)}%0A   Subtotal: ${formatPrice(sub)}%0A%0A`;
-  });
-  msg += `📊 Total: ${formatPrice(total)}%0A%0AEspero tu confirmación. ¡Gracias!`;
-  return msg;
-}
-
-function sendWhatsApp() {
-  let m = generateWhatsAppMessage();
-  if (m) window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${m}`, '_blank');
-  else alert("El carrito está vacío");
-}
-
-function openImageModal(src) {
-  let m = document.getElementById("imageModal");
-  m.style.display = "flex";
-  document.getElementById("modalImage").src = src;
-}
-
-function closeImageModal() {
-  document.getElementById("imageModal").style.display = "none";
-}
-
+function generateWhatsAppMessage() { let items = Object.values(cart); if (!items.length) return null; let msg = `¡Hola ${STORE_NAME}! Quisiera hacer un pedido:%0A%0A`, total = 0; items.forEach(i => { let sub = i.precio * i.cantidad; total += sub; let talleTexto = i.talle ? " (Talle: " + i.talle + ")" : ""; msg += `🔹 ${i.nombre}${talleTexto}%0A   Cantidad: ${i.cantidad} x ${formatPrice(i.precio)}%0A   Subtotal: ${formatPrice(sub)}%0A%0A`; }); msg += `📊 Total: ${formatPrice(total)}%0A%0AEspero tu confirmación. ¡Gracias!`; return msg; }
+function sendWhatsApp() { let m = generateWhatsAppMessage(); if (m) window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${m}`, '_blank'); else alert("El carrito está vacío"); }
+function openImageModal(src) { let m = document.getElementById("imageModal"); m.style.display = "flex"; document.getElementById("modalImage").src = src; }
+function closeImageModal() { document.getElementById("imageModal").style.display = "none"; }
 function applyFiltersAndRender() {
-  let result = [...allProducts];
-  if (currentCategory !== "all") result = result.filter(p => p.categoria === currentCategory);
-  filteredProducts = result;
+  let result = [...allProducts]; if (currentCategory !== "all") result = result.filter(p => p.categoria === currentCategory); filteredProducts = result;
   let grid = document.getElementById("productsGrid");
-  
-  if (!filteredProducts.length) {
-    grid.innerHTML = '<div class="col-span-full text-center py-20 text-gray-400"><p class="text-lg">📭 Sin productos en esta categoría</p></div>';
-    return;
-  }
-  
+  if (!filteredProducts.length) { grid.innerHTML = '<div class="col-span-full text-center py-20 text-gray-400"><p class="text-lg">📭 Sin productos en esta categoría</p></div>'; return; }
   let html = "";
-  filteredProducts.forEach((p, idx) => {
-    let qid = `qty_${p.id}`;
-    let talleSelectorHtml = "";
-    if (p.talles && p.talles.length > 0) {
-      let options = p.talles.map(t => `<option value="${escapeHtml(t)}">Talle ${escapeHtml(t)}</option>`).join('');
-      talleSelectorHtml = `<div class="talle-selector"><label>Selecciona talle:</label><select class="talle-select w-full" data-id="${p.id}" id="talle_${p.id}">${options}</select></div>`;
-    }
-    let ofertaHtml = (p.oferta && p.oferta.trim() !== "") ? `<div class="oferta-badge">🎉 ${escapeHtml(p.oferta)}</div>` : "";
-    let descripcionHtml = (p.descripcion && p.descripcion.trim() !== "") ? `<div class="product-description">${escapeHtml(p.descripcion)}</div>` : "";
-    
-    html += `<div class="product-card" style="animation-delay: ${idx * 0.05}s;">
-      <div class="product-image" onclick="openImageModal('${escapeHtml(p.imagen)}')">
-        <img src="${escapeHtml(p.imagen)}" alt="${escapeHtml(p.nombre)}">
-        <div class="product-badge">${escapeHtml(p.categoria)}</div>
-      </div>
-      <div class="product-content">
-        <div class="product-header">
-          <h3 class="product-name">${escapeHtml(p.nombre)}</h3>
-        </div>
-        ${descripcionHtml}
-        ${ofertaHtml}
-        <div class="product-price">${formatPrice(p.precio)}</div>
-        ${talleSelectorHtml}
-        <div class="flex items-center justify-between gap-2 mt-4">
-          <div class="qty-control">
-            <button class="qty-btn decr-qty" data-id="${p.id}">−</button>
-            <input type="number" id="${qid}" value="0" min="0" max="99" class="qty-input">
-            <button class="qty-btn incr-qty" data-id="${p.id}">+</button>
-          </div>
-        </div>
-        <button class="add-btn add-specific-btn" data-id="${p.id}" data-nombre="${escapeHtml(p.nombre)}" data-precio="${p.precio}" data-imagen="${escapeHtml(p.imagen)}">
-          <span>Agregar ✨</span>
-        </button>
-      </div>
-    </div>`;
-  });
-  
+  filteredProducts.forEach((p, idx) => { let qid = `qty_${p.id}`; let talleSelectorHtml = ""; if (p.talles && p.talles.length > 0) { let options = p.talles.map(t => `<option value="${escapeHtml(t)}">Talle ${escapeHtml(t)}</option>`).join(''); talleSelectorHtml = `<div class="talle-selector"><label>Selecciona talle:</label><select class="talle-select w-full" data-id="${p.id}" id="talle_${p.id}">${options}</select></div>`; } let ofertaHtml = (p.oferta && p.oferta.trim() !== "") ? `<div class="oferta-badge">🎉 ${escapeHtml(p.oferta)}</div>` : ""; let descripcionHtml = (p.descripcion && p.descripcion.trim() !== "") ? `<div class="product-description">${escapeHtml(p.descripcion)}</div>` : ""; html += `<div class="product-card" style="animation-delay: ${idx * 0.05}s;"><div class="product-image" onclick="openImageModal('${escapeHtml(p.imagen)}')"><img src="${escapeHtml(p.imagen)}"><div class="product-badge">${escapeHtml(p.categoria)}</div></div><div class="product-content"><div class="product-header"><h3 class="product-name">${escapeHtml(p.nombre)}</h3></div>${descripcionHtml}${ofertaHtml}<div class="product-price">${formatPrice(p.precio)}</div>${talleSelectorHtml}<div class="flex items-center justify-between gap-2 mt-4"><div class="qty-control"><button class="qty-btn decr-qty" data-id="${p.id}">−</button><input type="number" id="${qid}" value="0" min="0" max="99" class="qty-input"><button class="qty-btn incr-qty" data-id="${p.id}">+</button></div></div><button class="add-btn add-specific-btn" data-id="${p.id}" data-nombre="${escapeHtml(p.nombre)}" data-precio="${p.precio}" data-imagen="${escapeHtml(p.imagen)}"><span>Agregar ✨</span></button></div></div>`; });
   grid.innerHTML = html;
-  
-  filteredProducts.forEach(p => {
-    let inp = document.getElementById(`qty_${p.id}`);
-    let talleSelect = document.querySelector(`.talle-select[data-id="${p.id}"]`);
-    
-    document.querySelector(`.incr-qty[data-id="${p.id}"]`)?.addEventListener('click', () => {
-      let v = parseInt(inp.value) || 0;
-      if (v < 99) inp.value = v + 1;
-    });
-    
-    document.querySelector(`.decr-qty[data-id="${p.id}"]`)?.addEventListener('click', () => {
-      let v = parseInt(inp.value) || 0;
-      if (v > 0) inp.value = v - 1;
-    });
-    
-    document.querySelector(`.add-specific-btn[data-id="${p.id}"]`)?.addEventListener('click', () => {
-      let cant = parseInt(inp.value) || 0;
-      if (cant > 0) {
-        let talle = talleSelect ? talleSelect.value : null;
-        addToCart(p.id, p.nombre, p.precio, p.imagen, cant, talle);
-        inp.value = 0;
-      }
-    });
-  });
+  filteredProducts.forEach(p => { let inp = document.getElementById(`qty_${p.id}`); let talleSelect = document.querySelector(`.talle-select[data-id="${p.id}"]`); document.querySelector(`.incr-qty[data-id="${p.id}"]`)?.addEventListener('click', () => { let v = parseInt(inp.value) || 0; if (v < 99) inp.value = v + 1; }); document.querySelector(`.decr-qty[data-id="${p.id}"]`)?.addEventListener('click', () => { let v = parseInt(inp.value) || 0; if (v > 0) inp.value = v - 1; }); document.querySelector(`.add-specific-btn[data-id="${p.id}"]`)?.addEventListener('click', () => { let cant = parseInt(inp.value) || 0; if (cant > 0) { let talle = talleSelect ? talleSelect.value : null; addToCart(p.id, p.nombre, p.precio, p.imagen, cant, talle); inp.value = 0; } }); });
 }
-
-function updateCategories() {
-  let cats = [...new Set(allProducts.map(p => p.categoria))];
-  let cont = document.getElementById("categoriesFilter");
-  let allBtn = document.createElement('button');
-  allBtn.setAttribute('data-cat', 'all');
-  allBtn.textContent = '✨ Todos';
-  allBtn.className = 'cat-btn active';
-  
-  cont.innerHTML = "";
-  cont.appendChild(allBtn);
-  
-  cats.forEach(c => {
-    let btn = document.createElement('button');
-    btn.setAttribute('data-cat', c);
-    btn.textContent = c;
-    btn.className = "cat-btn";
-    cont.appendChild(btn);
-  });
-  
-  highlightActive();
-}
-
-function highlightActive() {
-  document.querySelectorAll('.cat-btn').forEach(b => {
-    let v = b.dataset.cat;
-    if ((currentCategory === "all" && v === "all") || (currentCategory !== "all" && v === currentCategory)) {
-      b.classList.add('active');
-    } else {
-      b.classList.remove('active');
-    }
-  });
-}
-
-// EVENT LISTENERS
-document.getElementById("categoriesFilter").addEventListener("click", e => {
-  let b = e.target.closest(".cat-btn");
-  if (b) {
-    currentCategory = b.dataset.cat;
-    highlightActive();
-    applyFiltersAndRender();
-  }
-});
-
-document.getElementById("cartButton").addEventListener("click", () => {
-  document.getElementById("cartOffcanvas").classList.add("open");
-  document.getElementById("offcanvasBackdrop").classList.add("show");
-});
-
-document.getElementById("closeCartBtn").addEventListener("click", () => {
-  document.getElementById("cartOffcanvas").classList.remove("open");
-  document.getElementById("offcanvasBackdrop").classList.remove("show");
-});
-
-document.getElementById("backFromCartBtn").addEventListener("click", () => {
-  document.getElementById("cartOffcanvas").classList.remove("open");
-  document.getElementById("offcanvasBackdrop").classList.remove("show");
-});
-
-document.getElementById("offcanvasBackdrop").addEventListener("click", () => {
-  document.getElementById("cartOffcanvas").classList.remove("open");
-  document.getElementById("offcanvasBackdrop").classList.remove("show");
-});
-
+function updateCategories() { let cats = [...new Set(allProducts.map(p => p.categoria))]; let cont = document.getElementById("categoriesFilter"); let allBtn = document.createElement('button'); allBtn.setAttribute('data-cat', 'all'); allBtn.textContent = '✨ Todos'; allBtn.className = 'cat-btn active'; cont.innerHTML = ""; cont.appendChild(allBtn); cats.forEach(c => { let btn = document.createElement('button'); btn.setAttribute('data-cat', c); btn.textContent = c; btn.className = "cat-btn"; cont.appendChild(btn); }); highlightActive(); }
+function highlightActive() { document.querySelectorAll('.cat-btn').forEach(b => { let v = b.dataset.cat; if ((currentCategory === "all" && v === "all") || (currentCategory !== "all" && v === currentCategory)) b.classList.add('active'); else b.classList.remove('active'); }); }
+document.getElementById("categoriesFilter").addEventListener("click", e => { let b = e.target.closest(".cat-btn"); if (b) { currentCategory = b.dataset.cat; highlightActive(); applyFiltersAndRender(); } });
+document.getElementById("cartButton").addEventListener("click", () => { document.getElementById("cartOffcanvas").classList.add("open"); document.getElementById("offcanvasBackdrop").classList.add("show"); });
+document.getElementById("closeCartBtn").addEventListener("click", () => { document.getElementById("cartOffcanvas").classList.remove("open"); document.getElementById("offcanvasBackdrop").classList.remove("show"); });
+document.getElementById("backFromCartBtn").addEventListener("click", () => { document.getElementById("cartOffcanvas").classList.remove("open"); document.getElementById("offcanvasBackdrop").classList.remove("show"); });
+document.getElementById("offcanvasBackdrop").addEventListener("click", () => { document.getElementById("cartOffcanvas").classList.remove("open"); document.getElementById("offcanvasBackdrop").classList.remove("show"); });
 document.getElementById("whatsappBtn").addEventListener("click", sendWhatsApp);
-
-document.getElementById("closeModalBtn").addEventListener("click", function(e) {
-  e.stopPropagation();
-  closeImageModal();
-});
-
-// INIT
-updateCategories();
-applyFiltersAndRender();
+document.getElementById("closeModalBtn").addEventListener("click", function(e) { e.stopPropagation(); closeImageModal(); });
+updateCategories(); applyFiltersAndRender();
 </script>
-
 </body>
 </html>
