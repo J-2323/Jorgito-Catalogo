@@ -1,115 +1,958 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Jorgito - Catálogo</title><script src="https://cdn.tailwindcss.com"></script>
-<style>
-.offcanvas { position: fixed; top: 0; right: -400px; width: 400px; max-width: 90%; height: 100%; background: white; box-shadow: -2px 0 8px rgba(0,0,0,0.2); z-index: 1050; transition: right 0.3s ease; display: flex; flex-direction: column; }
-.offcanvas.open { right: 0; }
-.offcanvas-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1040; display: none; }
-.offcanvas-backdrop.show { display: block; }
-.image-modal { display: none; position: fixed; z-index: 1100; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); cursor: pointer; align-items: center; justify-content: center; }
-.image-modal img { max-width: 90%; max-height: 90%; object-fit: contain; }
-.qty-btn { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; background: #f3f4f6; border-radius: 0.5rem; cursor: pointer; }
-.qty-btn:hover { background: #e5e7eb; }
-.qty-input { width: 45px; text-align: center; font-weight: 500; background: transparent; border: none; }
-select.talle-select { border: 1px solid #ddd; border-radius: 0.5rem; padding: 0.25rem 0.5rem; background: white; font-size: 0.875rem; }
-.modal-back-btn { position: absolute; top: 20px; left: 20px; z-index: 1101; background: white; color: black; border-radius: 9999px; padding: 0.5rem 1rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.2); cursor: pointer; border: none; }
-.modal-back-btn:hover { background: #f0f0f0; }
-.oferta-texto { background-color: #fef9c3; color: #b45309; font-size: 0.75rem; font-weight: 600; padding: 0.25rem 0.5rem; border-radius: 0.5rem; display: inline-block; margin: 0.5rem 0; }
-</style>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jorgito - Catálogo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * { font-family: 'Sora', sans-serif; }
+    h1, h2, h3, h4, h5, h6 { font-family: 'Space Grotesk', sans-serif; }
+    
+    :root {
+      --primary: #0F0F1E;
+      --primary-light: #1a1a2e;
+      --accent-cyan: #00D9FF;
+      --accent-magenta: #FF1B6D;
+      --accent-mint: #06D6A0;
+      --bg-light: #F8F8FB;
+      --bg-white: #FFFFFF;
+      --text-dark: #0F0F1E;
+      --text-gray: #4A4A4A;
+      --border-light: #E5E5F0;
+    }
+    
+    body {
+      background: linear-gradient(135deg, var(--bg-light) 0%, #F0E6FF 100%);
+      min-height: 100vh;
+      color: var(--text-dark);
+    }
+    
+    .header-gradient {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .header-gradient::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(0, 217, 255, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    
+    .header-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .logo-section {
+      background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-magenta) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .cart-btn {
+      background: linear-gradient(135deg, var(--accent-mint) 0%, var(--accent-cyan) 100%);
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 8px 24px rgba(6, 214, 160, 0.25);
+    }
+    
+    .cart-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(0, 217, 255, 0.35);
+    }
+    
+    .cart-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: left 0.5s;
+    }
+    
+    .cart-btn:hover::before {
+      left: 100%;
+    }
+    
+    .cart-count {
+      position: absolute;
+      -top-3;
+      -right-3;
+      background: linear-gradient(135deg, var(--accent-magenta) 0%, #FF6B9D 100%);
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.75rem;
+      box-shadow: 0 4px 12px rgba(255, 27, 109, 0.3);
+    }
+    
+    .category-filter {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      padding: 1.5rem;
+      background: var(--bg-white);
+      border-radius: 2rem;
+      border: 1px solid var(--border-light);
+      backdrop-filter: blur(10px);
+    }
+    
+    .cat-btn {
+      padding: 0.625rem 1.25rem;
+      border-radius: 1.5rem;
+      font-weight: 600;
+      font-size: 0.875rem;
+      border: 1px solid var(--border-light);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      background: var(--bg-light);
+      color: var(--text-gray);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .cat-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-magenta));
+      z-index: -1;
+      transition: left 0.3s;
+    }
+    
+    .cat-btn.active {
+      color: white;
+      border: none;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .cat-btn.active::before {
+      left: 0;
+    }
+    
+    .product-card {
+      background: var(--bg-white);
+      border-radius: 1.5rem;
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--accent-cyan);
+      box-shadow: 0 20px 40px rgba(0, 217, 255, 0.15);
+    }
+    
+    .product-image {
+      position: relative;
+      width: 100%;
+      height: 220px;
+      background: linear-gradient(135deg, #F0E6FF 0%, #E8F3FF 100%);
+      overflow: hidden;
+      cursor: pointer;
+    }
+    
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .product-card:hover .product-image img {
+      transform: scale(1.08);
+    }
+    
+    .product-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 0.5rem 0.875rem;
+      border-radius: 1rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent-magenta);
+    }
+    
+    .product-content {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .product-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .product-name {
+      font-weight: 700;
+      font-size: 1rem;
+      line-height: 1.4;
+      color: var(--text-dark);
+    }
+    
+    .product-category {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.75rem;
+      background: linear-gradient(135deg, #E0F7FF, #F0E6FF);
+      color: var(--primary);
+    }
+    
+    .product-description {
+      font-size: 0.85rem;
+      color: var(--text-gray);
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+    }
+    
+    .oferta-badge {
+      background: linear-gradient(135deg, #FFF9E6 0%, #FFEFCC 100%);
+      color: #8B6914;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.625rem 0.875rem;
+      border-radius: 1rem;
+      margin: 0.75rem 0;
+      border-left: 3px solid #FFB800;
+      display: inline-block;
+    }
+    
+    .product-price {
+      font-size: 1.75rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-magenta), var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 1rem 0;
+    }
+    
+    .talle-selector {
+      margin: 1rem 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .talle-selector label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-gray);
+    }
+    
+    .talle-selector select {
+      padding: 0.75rem;
+      border: 1px solid var(--border-light);
+      border-radius: 1rem;
+      font-size: 0.875rem;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .talle-selector select:focus {
+      outline: none;
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
+    }
+    
+    .qty-control {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--bg-light);
+      border-radius: 1.25rem;
+      padding: 0.25rem;
+      border: 1px solid var(--border-light);
+    }
+    
+    .qty-btn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 1.2rem;
+      transition: all 0.2s;
+      border-radius: 1rem;
+    }
+    
+    .qty-btn:hover {
+      background: white;
+      color: var(--accent-magenta);
+    }
+    
+    .qty-input {
+      width: 50px;
+      text-align: center;
+      font-weight: 700;
+      background: transparent;
+      border: none;
+      font-size: 0.95rem;
+    }
+    
+    .add-btn {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      font-weight: 700;
+      padding: 0.875rem 1.5rem;
+      border-radius: 1.25rem;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      margin-top: 1rem;
+      position: relative;
+      overflow: hidden;
+      font-size: 0.95rem;
+    }
+    
+    .add-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(0, 217, 255, 0.3), rgba(255, 27, 109, 0.3));
+      transition: left 0.3s;
+      z-index: 0;
+    }
+    
+    .add-btn span {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .add-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(15, 15, 30, 0.25);
+    }
+    
+    .add-btn:hover::before {
+      left: 100%;
+    }
+    
+    .offcanvas {
+      position: fixed;
+      top: 0;
+      right: -450px;
+      width: 100%;
+      max-width: 450px;
+      height: 100vh;
+      background: white;
+      z-index: 1050;
+      transition: right 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      flex-direction: column;
+      box-shadow: -8px 0 32px rgba(0, 0, 0, 0.15);
+    }
+    
+    .offcanvas.open {
+      right: 0;
+    }
+    
+    .offcanvas-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+      color: white;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(0, 217, 255, 0.2);
+    }
+    
+    .offcanvas-header h2 {
+      font-size: 1.5rem;
+      margin: 0;
+    }
+    
+    .close-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      transition: transform 0.2s;
+    }
+    
+    .close-btn:hover {
+      transform: scale(1.1);
+    }
+    
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+    }
+    
+    .cart-item {
+      display: flex;
+      gap: 1rem;
+      border-bottom: 1px solid var(--border-light);
+      padding: 1.25rem 0;
+      position: relative;
+    }
+    
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+    
+    .cart-item-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 1rem;
+      object-fit: cover;
+      background: var(--bg-light);
+    }
+    
+    .cart-item-content {
+      flex: 1;
+    }
+    
+    .cart-item-title {
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      font-size: 0.95rem;
+    }
+    
+    .cart-item-price {
+      font-size: 0.85rem;
+      color: var(--accent-magenta);
+      font-weight: 600;
+    }
+    
+    .cart-item-qty {
+      font-size: 0.8rem;
+      color: var(--text-gray);
+      margin-top: 0.25rem;
+    }
+    
+    .remove-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: rgba(255, 27, 109, 0.1);
+      border: none;
+      color: var(--accent-magenta);
+      width: 32px;
+      height: 32px;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+    
+    .remove-btn:hover {
+      background: var(--accent-magenta);
+      color: white;
+    }
+    
+    .empty-cart {
+      text-align: center;
+      color: var(--text-gray);
+      padding: 2rem;
+    }
+    
+    .cart-footer {
+      padding: 1.5rem;
+      border-top: 1px solid var(--border-light);
+    }
+    
+    .cart-info {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-gray);
+      margin-bottom: 1rem;
+      padding: 0.75rem;
+      background: var(--bg-light);
+      border-radius: 1rem;
+    }
+    
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+    
+    .cart-total span:last-child {
+      background: linear-gradient(135deg, var(--accent-magenta), var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .whatsapp-btn {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, #25D366 0%, #06D6A0 100%);
+      color: white;
+      border: none;
+      border-radius: 1.25rem;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 8px 24px rgba(37, 211, 102, 0.3);
+    }
+    
+    .whatsapp-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(37, 211, 102, 0.4);
+    }
+    
+    .offcanvas-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 1040;
+      display: none;
+      backdrop-filter: blur(4px);
+    }
+    
+    .offcanvas-backdrop.show {
+      display: block;
+    }
+    
+    .image-modal {
+      display: none;
+      position: fixed;
+      z-index: 1100;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+    }
+    
+    .image-modal img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+      border-radius: 1.5rem;
+      animation: modalZoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    @keyframes modalZoom {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    
+    .modal-back-btn {
+      position: absolute;
+      top: 2rem;
+      left: 2rem;
+      z-index: 1101;
+      background: white;
+      color: black;
+      border-radius: 1.5rem;
+      padding: 0.75rem 1.5rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    
+    .modal-back-btn:hover {
+      background: var(--bg-light);
+    }
+    
+    @media (max-width: 768px) {
+      .offcanvas { max-width: 100%; }
+      .product-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .product-card {
+      animation: fadeInUp 0.5s ease-out forwards;
+    }
+  </style>
 </head>
-<body class="bg-gray-50">
+<body>
+
 <div class="min-h-screen pb-24">
-<header style="background: linear-gradient(90deg,rgba(33, 22, 186, 1) 0%, rgba(124, 27, 250, 1) 100%);" class="text-white sticky top-0 z-40 shadow-lg"><div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center"><div><h1 class="text-xl font-black">Jorgito</h1><p class="text-xs text-white/80">Catálogo de Artículos</p></div><button id="cartButton" class="bg-green-500 hover:bg-white hover:text-green-600 text-white font-bold py-2 px-6 rounded-full transition flex items-center gap-2 relative"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 10a4 4 0 0 1-8 0"></path><path d="M3.103 6.034h17.794"></path><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"></path></svg><span>Ir al carrito</span><span id="cartCount" class="absolute -top-2 -right-2 bg-yellow-400 text-green-600 text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold">0</span></button></div></header>
-<main class="max-w-7xl mx-auto px-4 py-8"><div class="space-y-6"><div class="bg-white p-6 rounded-3xl shadow-sm border"><div id="categoriesFilter" class="flex gap-2 flex-wrap"><button data-cat="all" class="cat-btn px-5 py-2.5 rounded-xl font-medium bg-indigo-600 text-white">Todos</button></div></div><div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div></div></main>
+  <!-- HEADER -->
+  <header class="header-gradient text-white sticky top-0 z-40">
+    <div class="header-content max-w-7xl mx-auto px-4 py-6">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-4xl font-black logo-section">Jorgito</h1>
+          <p class="text-sm text-white/60 mt-1">Colección Premium de Artículos</p>
+        </div>
+        <button id="cartButton" class="cart-btn text-white font-bold py-3 px-8 rounded-2xl flex items-center gap-3 relative">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+            <path d="M3.103 6.034h17.794"></path>
+            <path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"></path>
+          </svg>
+          <span>Carrito</span>
+          <span id="cartCount" class="cart-count">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-7xl mx-auto px-4 py-12">
+    <div class="space-y-8">
+      <!-- FILTERS -->
+      <div id="categoriesFilter" class="category-filter"></div>
+      
+      <!-- PRODUCTS GRID -->
+      <div id="productsGrid" class="product-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+    </div>
+  </main>
 </div>
-<div id="cartOffcanvas" class="offcanvas"><div class="p-4 bg-indigo-600 text-white flex justify-between items-center"><button id="backFromCartBtn" class="text-white text-lg flex items-center gap-1">← Volver</button><h2 class="text-xl font-bold">🛒 Carrito</h2><button id="closeCartBtn" class="text-white text-2xl">&times;</button></div><div id="cartItemsList" class="flex-1 overflow-y-auto p-4"></div><div class="p-4 border-t"><div class="text-center text-sm text-gray-600 mb-3">📝 Atención personalizada para coordinar el pedido</div><div class="flex justify-between font-bold text-lg mb-4"><span>Total:</span><span id="cartTotal">$0</span></div><button id="whatsappBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl">💬 Enviar mensaje al WhatsApp</button></div></div>
+
+<!-- CART OFFCANVAS -->
+<div id="cartOffcanvas" class="offcanvas">
+  <div class="offcanvas-header">
+    <button id="backFromCartBtn" class="text-white flex items-center gap-2 font-bold">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 19l-7-7 7-7"></path>
+      </svg>
+      Volver
+    </button>
+    <h2>🛒 Tu Carrito</h2>
+    <button id="closeCartBtn" class="close-btn">×</button>
+  </div>
+  
+  <div id="cartItemsList" class="cart-items"></div>
+  
+  <div class="cart-footer">
+    <div class="cart-info">
+      📝 Atención personalizada para coordinar el pedido
+    </div>
+    <div class="cart-total">
+      <span>Total:</span>
+      <span id="cartTotal">$0</span>
+    </div>
+    <button id="whatsappBtn" class="whatsapp-btn">💬 Enviar al WhatsApp</button>
+  </div>
+</div>
+
+<!-- BACKDROP -->
 <div id="offcanvasBackdrop" class="offcanvas-backdrop"></div>
-<div id="imageModal" class="image-modal" onclick="closeImageModal()"><button id="closeModalBtn" class="modal-back-btn">← Volver</button><img id="modalImage"></div>
+
+<!-- IMAGE MODAL -->
+<div id="imageModal" class="image-modal" onclick="closeImageModal()">
+  <button id="closeModalBtn" class="modal-back-btn">← Volver</button>
+  <img id="modalImage" alt="Producto">
+</div>
+
 <script>
 const STORE_NAME = "Jorgito's";
 const WHATSAPP_NUMBER = "543425517395";
-let allProducts = [{"id":"bd533b1e-f967-4701-a637-abfa4af593d1","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SB JORDAN","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_7sWXbNC0Zx.png","talles":["39","40","41"]},{"id":"afcf6610-9c7c-4865-bf50-3fac4e69a225","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SB JORDAN","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_XfYcozN4f1.png","talles":["39","40","41"]},{"id":"e2d2ad06-773b-415c-ac8c-e8f4b64cbb52","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SB JORDAN","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_qOsbiPPaRM.png","talles":["39","40","41"]},{"id":"eba26f11-6a8d-4413-b3f5-7aabd48adf70","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla JORDAN BOTITA","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_sbvJkK5Yxy.png","talles":["39","40","41"]},{"id":"15cfc1b1-d711-4fad-bf6e-5096d1c52f1f","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SUPERNOVA","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_j3fqwdJIjd.png","talles":["38","40"]},{"id":"7f8af94a-a8b4-4f56-969a-30023eec089c","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SUPERNOVA","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_YIJkEmh5DG.png","talles":["39","40","41"]},{"id":"c3532447-a720-406c-99a6-965ae73d5319","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla NIKE ZOOM","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_XfYcozN4f1.png","talles":["39","40","41"]},{"id":"2f628c30-2801-4ee6-a62a-44ddb15246e4","categoria":"Calzados (Catálogo 1)","nombre":"FÚTBOL 11 NIKE","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_mi4cOGeQJ0.png","talles":["39","40","41"]},{"id":"18f77218-0132-45f0-a28c-a5b0840195ce","categoria":"Calzados (Catálogo 1)","nombre":"PUMA FERRARI","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_YEFCEBSrnL.png","talles":["38","39"]},{"id":"053bfd50-5960-4132-b16b-2b4e2bd680cf","categoria":"Calzados (Catálogo 1)","nombre":"BOTA CAT","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_BVad0InYol.png","talles":["41","42","43","44","45"]},{"id":"ed9a5c50-3707-414d-872e-f1c09973df7b","categoria":"Calzados (Catálogo 1)","nombre":"ADIDAS KANADIA","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/chrome_UPqXc7mIln.png","talles":["42","43","44","45"]},{"id":"b0a4a16e-1c89-4136-af23-01736cd18746","categoria":"Calzados (Catálogo 1)","nombre":"PUMA 181","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/chrome_EwUqa1V7yN.png","talles":["38","39","40","41","42"]},{"id":"f4815235-4e3d-4fb3-9d42-928f25f93199","categoria":"Calzados (Catálogo 1)","nombre":"ADIDAS TENIS","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/chrome_7ukH51x8P1.png","talles":["34","35","36","37","38","39"]},{"id":"a2316e23-a0db-44fb-95ca-0296c9fce4a8","categoria":"Calzados (Catálogo 1)","nombre":"FILA HEATING AZUL","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/chrome_7nx4cxRyjq.png","talles":["38","39","40","41","42","43"]},{"id":"2a09f2f2-6532-4cef-8872-3c30ae05da6f","categoria":"Calzados (Catálogo 1)","nombre":"FILA HEATING NEGRA","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/chrome_GGm5XQHevi.png","talles":["38","39","40","41","42"]},{"id":"253f2c57-0792-41ad-9033-e3880ee3152f","categoria":"Calzados  (Catálogo 2)","nombre":"Vans Hylane cream black","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/5127fe9a-5d99-4b9a-a73a-608acb6e8998.jpg","talles":["40.41"]},{"id":"fb716036-2b69-4b07-a6fd-d74ecc259e96","categoria":"Calzados  (Catálogo 2)","nombre":"Vans Upland total white","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/6255458d-278c-4357-a9e4-c076ec8dc30c.jpg","talles":["40.42"]},{"id":"2c10570a-3eee-4daf-87fc-77a55eb84a89","categoria":"Calzados  (Catálogo 2)","nombre":"Puma 180 clasica","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/7ee20142-da93-4c34-9118-06967832eaa3.jpg","talles":["39","40","41","42"]},{"id":"f36232de-e03e-4e14-bb5a-d97c36f73b91","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas campus Beta marron","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/e54c6abf-a424-49a7-bf59-9feac24bd63d.jpg","talles":["34","35","36","37","38","39"]},{"id":"9ecf0206-898c-46a6-83e4-776566d22e4f","categoria":"Calzados  (Catálogo 2)","nombre":"New Balance 9060 total black","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/516f3931-3306-484b-a77b-6a5112a35e12.jpg","talles":["34","35","36","37","40"]},{"id":"effacf9e-a6a5-40fe-8ae0-15dcb2ade857","categoria":"Calzados  (Catálogo 2)","nombre":"Ultra Range gris","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/23df31d5-1220-44b9-a208-58b40d8e1084.jpg","talles":["35","36","38","40"]},{"id":"2ee18eca-6521-42d1-bded-86cdfbd5562d","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas 2000 verde","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/3c2e8f19-f015-4422-a59d-8a9753fb4b3d.jpg","talles":["34","36","37","38","40"]},{"id":"4e204e4b-60c0-4f9e-8b36-b75c2cee6a94","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas 2000 gris/blanco","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/fa0186a9-ad8f-4586-b4f6-dd22aaf92584.jpg","talles":["40","41","42"]},{"id":"11bb528a-ff0c-477c-a92a-ca1fe8be3057","categoria":"Calzados  (Catálogo 2)","nombre":"Samba black lineas blancas","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/d810c31a-cfb2-41e2-9fbd-015679eb88f1.jpg","talles":["34","35","36","37","38","39","40","41"]},{"id":"c96e4a34-5256-48bb-8b63-d14cb5c1969d","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas Forum Grafito","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/a608bc96-e467-442a-8c3f-da7e215580b8.jpg","talles":["38","39","40","42","43"]},{"id":"44774ffc-7c8a-4998-b66d-499693ee5dee","categoria":"Calzados  (Catálogo 2)","nombre":"didas Drop Step Low grafito","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/a3f9edf5-4b20-4040-b00c-4c9906ec4b57.jpg","talles":["39.4"]},{"id":"a0571f9f-b81a-44d9-87e3-bd1e435d6a8d","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas Super Nova negra y roja","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/47c13c8c-7806-4ded-af58-b8360ddf12e9.jpg","talles":["40"]},{"id":"75db233e-ab95-47b2-b02e-b242205adaa6","categoria":"Notebooks","nombre":"Acer Nitro","descripcion":"Acer Nitro V 15 - 52- 57BB/ I5 /\n15.6¨ / RTX 5050 / 16-512 GB -\nNegro - 512GB","oferta":"","precio":2150391,"imagen":"imgsNotebooks/Acer_Nitro_V_15_ANV15-51__1__03 - copia.jpg","talles":[]},{"id":"af663c90-a617-4377-86e9-580f3ca8d8e1","categoria":"Notebooks","nombre":"Acer Nitro","descripcion":"Acer Nitro V 15 I9/ 15.6¨/ W11/ RTX\n5060/ 16 GB RAM/ 1 TB - 1TB","oferta":"","precio":3023321.9999999995,"imagen":"imgsNotebooks/Acer_Nitro_V_15_ANV15-51__1__03.jpg","talles":[]}];
+
+let allProducts = [{"id":"011b0701-7456-44aa-af35-917bda5b35f5","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SB JORDAN","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_7sWXbNC0Zx.png","talles":["39","40","41"]},{"id":"470624ad-c13b-4d5a-82f7-f5e3a2c970d9","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SB JORDAN","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_XfYcozN4f1.png","talles":["39","40","41"]},{"id":"90ccbd8f-033d-4fd2-b207-3ae7924d89d7","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SB JORDAN","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_qOsbiPPaRM.png","talles":["39","40","41"]},{"id":"05c0aea1-edae-487b-8b72-950e87a96ec6","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla JORDAN BOTITA","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_sbvJkK5Yxy.png","talles":["39","40","41"]},{"id":"e2865ea6-358d-4954-a113-9fb7de83899a","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SUPERNOVA","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_j3fqwdJIjd.png","talles":["38","40"]},{"id":"2dbdc86c-701f-4f67-84da-c1467d4ee359","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla SUPERNOVA","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_YIJkEmh5DG.png","talles":["39","40","41"]},{"id":"10b732d8-d033-4dae-b02b-104455f67a6b","categoria":"Calzados (Catálogo 1)","nombre":"zapatilla NIKE ZOOM","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_XfYcozN4f1.png","talles":["39","40","41"]},{"id":"fa59a567-4d31-42fa-983b-48e9f92919d4","categoria":"Calzados (Catálogo 1)","nombre":"FÚTBOL 11 NIKE","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_mi4cOGeQJ0.png","talles":["39","40","41"]},{"id":"c5f6c262-7b3c-461e-8703-fee603be5310","categoria":"Calzados (Catálogo 1)","nombre":"PUMA FERRARI","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_YEFCEBSrnL.png","talles":["38","39"]},{"id":"7b290dce-691d-442d-815a-6c11275fc1b4","categoria":"Calzados (Catálogo 1)","nombre":"BOTA CAT","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/Photos_BVad0InYol.png","talles":["41","42","43","44","45"]},{"id":"0c1a370d-c0a0-479a-a3f4-5bcc2a4478dd","categoria":"Calzados (Catálogo 1)","nombre":"ADIDAS KANADIA","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/chrome_UPqXc7mIln.png","talles":["42","43","44","45"]},{"id":"f98d8af6-5ab5-4732-bfa3-573a11926491","categoria":"Calzados (Catálogo 1)","nombre":"PUMA 181","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/chrome_EwUqa1V7yN.png","talles":["38","39","40","41","42"]},{"id":"5ac87a80-3240-4ca1-a225-eed86df01d6f","categoria":"Calzados (Catálogo 1)","nombre":"ADIDAS TENIS","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/chrome_7ukH51x8P1.png","talles":["34","35","36","37","38","39"]},{"id":"0371b588-f9f5-4a4a-a3c6-448355b128a5","categoria":"Calzados (Catálogo 1)","nombre":"FILA HEATING AZUL","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/chrome_7nx4cxRyjq.png","talles":["38","39","40","41","42","43"]},{"id":"664334d6-cb57-4c33-81a4-6e897190a67b","categoria":"Calzados (Catálogo 1)","nombre":"FILA HEATING NEGRA","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":47300,"imagen":"imagenes/chrome_GGm5XQHevi.png","talles":["38","39","40","41","42"]},{"id":"90481fe9-d66e-4320-bca9-d21c53a1f737","categoria":"Calzados  (Catálogo 2)","nombre":"Vans Hylane cream black","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/5127fe9a-5d99-4b9a-a73a-608acb6e8998.jpg","talles":["40.41"]},{"id":"45e263c3-49c1-4233-8d3e-660605130694","categoria":"Calzados  (Catálogo 2)","nombre":"Vans Upland total white","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/6255458d-278c-4357-a9e4-c076ec8dc30c.jpg","talles":["40.42"]},{"id":"2c16c410-0364-4e81-be3a-59d10ce551e0","categoria":"Calzados  (Catálogo 2)","nombre":"Puma 180 clasica","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/7ee20142-da93-4c34-9118-06967832eaa3.jpg","talles":["39","40","41","42"]},{"id":"f76499d0-d711-46bd-ad0f-3ce17eb3d15a","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas campus Beta marron","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/e54c6abf-a424-49a7-bf59-9feac24bd63d.jpg","talles":["34","35","36","37","38","39"]},{"id":"2cc90279-30fd-4d61-8373-97fa10c25a03","categoria":"Calzados  (Catálogo 2)","nombre":"New Balance 9060 total black","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/516f3931-3306-484b-a77b-6a5112a35e12.jpg","talles":["34","35","36","37","40"]},{"id":"d854d597-9e0f-4dab-b1ae-d5e66cb5c3df","categoria":"Calzados  (Catálogo 2)","nombre":"Ultra Range gris","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/23df31d5-1220-44b9-a208-58b40d8e1084.jpg","talles":["35","36","38","40"]},{"id":"fc57fd20-da30-47c6-98fd-1a93d36f99d0","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas 2000 verde","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/3c2e8f19-f015-4422-a59d-8a9753fb4b3d.jpg","talles":["34","36","37","38","40"]},{"id":"41ae8592-48ce-4161-afdf-fed7df7385b4","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas 2000 gris/blanco","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/fa0186a9-ad8f-4586-b4f6-dd22aaf92584.jpg","talles":["40","41","42"]},{"id":"103004e1-47b6-43f7-89db-4bbb4661ff31","categoria":"Calzados  (Catálogo 2)","nombre":"Samba black lineas blancas","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/d810c31a-cfb2-41e2-9fbd-015679eb88f1.jpg","talles":["34","35","36","37","38","39","40","41"]},{"id":"ac80488c-5846-4214-8805-13be94051237","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas Forum Grafito","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/a608bc96-e467-442a-8c3f-da7e215580b8.jpg","talles":["38","39","40","42","43"]},{"id":"fbb40b85-262d-4349-a9d0-d791c7220a3b","categoria":"Calzados  (Catálogo 2)","nombre":"didas Drop Step Low grafito","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/a3f9edf5-4b20-4040-b00c-4c9906ec4b57.jpg","talles":["39.4"]},{"id":"84dfe7cc-e7d8-49a8-9062-b3f95ac2c4cb","categoria":"Calzados  (Catálogo 2)","nombre":"Adidas Super Nova negra y roja","descripcion":"","oferta":"Compra mínima 3 PARES SURTIDOS. Incluye Envío","precio":53300,"imagen":"imagenes2/47c13c8c-7806-4ded-af58-b8360ddf12e9.jpg","talles":["40"]},{"id":"d3eb6ad6-885b-4b88-9201-e4fdbe234a2a","categoria":"Notebooks","nombre":"Acer Nitro","descripcion":"Acer Nitro V 15 - 52- 57BB/ I5 / 15.6¨ / RTX 5050 / 16-512 GB - Negro - 512GB","oferta":"","precio":2150391,"imagen":"imgsNotebooks/Acer_Nitro_V_15_ANV15-51__1__03 - copia.jpg","talles":[]},{"id":"c4b08a39-951b-4928-b515-f972ce90b1aa","categoria":"Notebooks","nombre":"Acer Nitro","descripcion":"Acer Nitro V 15 I9/ 15.6¨/ W11/ RTX 5060/ 16 GB RAM/ 1 TB - 1TB","oferta":"","precio":3023321.9999999995,"imagen":"imgsNotebooks/Acer_Nitro_V_15_ANV15-51__1__03.jpg","talles":[]}];
+
 let filteredProducts = [], currentCategory = "all", cart = {};
-function formatPrice(p){ let n=parseFloat(p); return isNaN(n)?"$0":"$"+n.toLocaleString('es-ES'); }
-function escapeHtml(s){ if(!s) return ""; return s.replace(/[&<>]/g,m=>m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
-function updateCartUI(){ document.getElementById("cartCount").innerText=Object.values(cart).reduce((s,i)=>s+i.cantidad,0); renderCartOffcanvas(); }
-function addToCart(id,nombre,precio,imagen,cant,talle){
-    if(cant<=0) return;
-    let key = talle ? id+"_"+talle : id;
-    if(cart[key]) cart[key].cantidad+=cant;
-    else cart[key]={idOriginal:id,nombre,precio,cantidad:cant,imagen,talle:talle};
+
+function formatPrice(p) {
+  let n = parseFloat(p);
+  return isNaN(n) ? "$0" : "$" + n.toLocaleString('es-ES');
+}
+
+function escapeHtml(s) {
+  if (!s) return "";
+  return s.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
+}
+
+function updateCartUI() {
+  document.getElementById("cartCount").innerText = Object.values(cart).reduce((s, i) => s + i.cantidad, 0);
+  renderCartOffcanvas();
+}
+
+function addToCart(id, nombre, precio, imagen, cant, talle) {
+  if (cant <= 0) return;
+  let key = talle ? id + "_" + talle : id;
+  if (cart[key]) cart[key].cantidad += cant;
+  else cart[key] = { idOriginal: id, nombre, precio, cantidad: cant, imagen, talle: talle };
+  updateCartUI();
+}
+
+function removeProductFromCart(key) {
+  if (cart[key]) { delete cart[key]; updateCartUI(); }
+}
+
+function removeOneFromCart(key) {
+  if (cart[key]) {
+    if (cart[key].cantidad > 1) cart[key].cantidad--;
+    else delete cart[key];
     updateCartUI();
+  }
 }
-function removeProductFromCart(key){ if(cart[key]){ delete cart[key]; updateCartUI(); } }
-function removeOneFromCart(key){ if(cart[key]){ if(cart[key].cantidad>1) cart[key].cantidad--; else delete cart[key]; updateCartUI(); } }
-function renderCartOffcanvas(){
-    let container=document.getElementById("cartItemsList"), items=Object.values(cart);
-    if(!items.length){ container.innerHTML='<div class="text-center text-gray-400">Vacío</div>'; document.getElementById("cartTotal").innerText=formatPrice(0); return; }
-    let html="", total=0;
-    for(let [key,item] of Object.entries(cart)){ let sub=item.precio*item.cantidad; total+=sub;
-        let talleInfo = item.talle ? " | Talle: "+escapeHtml(item.talle) : "";
-        html+=`<div class="flex gap-3 border-b pb-3 relative"><img src="${escapeHtml(item.imagen)}" class="w-16 h-16 object-cover rounded-lg"><div><h4 class="font-bold pr-6">${escapeHtml(item.nombre)}${talleInfo}</h4><div>Precio: ${formatPrice(item.precio)}</div><div>Cant: ${item.cantidad} | ${formatPrice(sub)}</div><button class="text-xs bg-red-100 text-red-600 px-2 py-1 rounded remove-one-btn" data-key="${key}">Eliminar 1</button></div><button class="absolute top-0 right-0 text-red-500 font-bold text-lg remove-product-btn" data-key="${key}">✕</button></div>`;
+
+function renderCartOffcanvas() {
+  let container = document.getElementById("cartItemsList"), items = Object.values(cart);
+  if (!items.length) {
+    container.innerHTML = '<div class="empty-cart">🛒 Tu carrito está vacío</div>';
+    document.getElementById("cartTotal").innerText = formatPrice(0);
+    return;
+  }
+  let html = "", total = 0;
+  for (let [key, item] of Object.entries(cart)) {
+    let sub = item.precio * item.cantidad;
+    total += sub;
+    let talleInfo = item.talle ? " | Talle: " + escapeHtml(item.talle) : "";
+    html += `<div class="cart-item">
+      <img src="${escapeHtml(item.imagen)}" class="cart-item-image" alt="${escapeHtml(item.nombre)}">
+      <div class="cart-item-content">
+        <div class="cart-item-title">${escapeHtml(item.nombre)}${talleInfo}</div>
+        <div class="cart-item-price">${formatPrice(item.precio)}</div>
+        <div class="cart-item-qty">Cantidad: ${item.cantidad} × ${formatPrice(sub)}</div>
+        <button class="remove-btn remove-one-btn" data-key="${key}">−</button>
+      </div>
+      <button class="remove-btn" style="position: static;" data-key="${key}" onclick="removeProductFromCart('${key}'); updateCartUI();">✕</button>
+    </div>`;
+  }
+  container.innerHTML = html;
+  document.getElementById("cartTotal").innerText = formatPrice(total);
+  document.querySelectorAll('.remove-one-btn').forEach(b => b.addEventListener('click', () => removeOneFromCart(b.dataset.key)));
+}
+
+function generateWhatsAppMessage() {
+  let items = Object.values(cart);
+  if (!items.length) return null;
+  let msg = `¡Hola ${STORE_NAME}! Quisiera hacer un pedido:%0A%0A`, total = 0;
+  items.forEach(i => {
+    let sub = i.precio * i.cantidad;
+    total += sub;
+    let talleTexto = i.talle ? " (Talle: " + i.talle + ")" : "";
+    msg += `🔹 ${i.nombre}${talleTexto}%0A   Cantidad: ${i.cantidad} x ${formatPrice(i.precio)}%0A   Subtotal: ${formatPrice(sub)}%0A%0A`;
+  });
+  msg += `📊 Total: ${formatPrice(total)}%0A%0AEspero tu confirmación. ¡Gracias!`;
+  return msg;
+}
+
+function sendWhatsApp() {
+  let m = generateWhatsAppMessage();
+  if (m) window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${m}`, '_blank');
+  else alert("El carrito está vacío");
+}
+
+function openImageModal(src) {
+  let m = document.getElementById("imageModal");
+  m.style.display = "flex";
+  document.getElementById("modalImage").src = src;
+}
+
+function closeImageModal() {
+  document.getElementById("imageModal").style.display = "none";
+}
+
+function applyFiltersAndRender() {
+  let result = [...allProducts];
+  if (currentCategory !== "all") result = result.filter(p => p.categoria === currentCategory);
+  filteredProducts = result;
+  let grid = document.getElementById("productsGrid");
+  
+  if (!filteredProducts.length) {
+    grid.innerHTML = '<div class="col-span-full text-center py-20 text-gray-400"><p class="text-lg">📭 Sin productos en esta categoría</p></div>';
+    return;
+  }
+  
+  let html = "";
+  filteredProducts.forEach((p, idx) => {
+    let qid = `qty_${p.id}`;
+    let talleSelectorHtml = "";
+    if (p.talles && p.talles.length > 0) {
+      let options = p.talles.map(t => `<option value="${escapeHtml(t)}">Talle ${escapeHtml(t)}</option>`).join('');
+      talleSelectorHtml = `<div class="talle-selector"><label>Selecciona talle:</label><select class="talle-select w-full" data-id="${p.id}" id="talle_${p.id}">${options}</select></div>`;
     }
-    container.innerHTML=html; document.getElementById("cartTotal").innerText=formatPrice(total);
-    document.querySelectorAll('.remove-one-btn').forEach(b=>b.addEventListener('click',()=>removeOneFromCart(b.dataset.key)));
-    document.querySelectorAll('.remove-product-btn').forEach(b=>b.addEventListener('click',()=>removeProductFromCart(b.dataset.key)));
-}
-function generateWhatsAppMessage(){
-    let items=Object.values(cart); if(!items.length) return null;
-    let msg=`¡Hola ${STORE_NAME}! Quisiera hacer un pedido:%0A%0A`, total=0;
-    items.forEach(i=>{ let sub=i.precio*i.cantidad; total+=sub;
-        let talleTexto = i.talle ? " (Talle: "+i.talle+")" : "";
-        msg+=`🔹 ${i.nombre}${talleTexto}%0A   Cantidad: ${i.cantidad} x ${formatPrice(i.precio)}%0A   Subtotal: ${formatPrice(sub)}%0A%0A`;
+    let ofertaHtml = (p.oferta && p.oferta.trim() !== "") ? `<div class="oferta-badge">🎉 ${escapeHtml(p.oferta)}</div>` : "";
+    let descripcionHtml = (p.descripcion && p.descripcion.trim() !== "") ? `<div class="product-description">${escapeHtml(p.descripcion)}</div>` : "";
+    
+    html += `<div class="product-card" style="animation-delay: ${idx * 0.05}s;">
+      <div class="product-image" onclick="openImageModal('${escapeHtml(p.imagen)}')">
+        <img src="${escapeHtml(p.imagen)}" alt="${escapeHtml(p.nombre)}">
+        <div class="product-badge">${escapeHtml(p.categoria)}</div>
+      </div>
+      <div class="product-content">
+        <div class="product-header">
+          <h3 class="product-name">${escapeHtml(p.nombre)}</h3>
+        </div>
+        ${descripcionHtml}
+        ${ofertaHtml}
+        <div class="product-price">${formatPrice(p.precio)}</div>
+        ${talleSelectorHtml}
+        <div class="flex items-center justify-between gap-2 mt-4">
+          <div class="qty-control">
+            <button class="qty-btn decr-qty" data-id="${p.id}">−</button>
+            <input type="number" id="${qid}" value="0" min="0" max="99" class="qty-input">
+            <button class="qty-btn incr-qty" data-id="${p.id}">+</button>
+          </div>
+        </div>
+        <button class="add-btn add-specific-btn" data-id="${p.id}" data-nombre="${escapeHtml(p.nombre)}" data-precio="${p.precio}" data-imagen="${escapeHtml(p.imagen)}">
+          <span>Agregar ✨</span>
+        </button>
+      </div>
+    </div>`;
+  });
+  
+  grid.innerHTML = html;
+  
+  filteredProducts.forEach(p => {
+    let inp = document.getElementById(`qty_${p.id}`);
+    let talleSelect = document.querySelector(`.talle-select[data-id="${p.id}"]`);
+    
+    document.querySelector(`.incr-qty[data-id="${p.id}"]`)?.addEventListener('click', () => {
+      let v = parseInt(inp.value) || 0;
+      if (v < 99) inp.value = v + 1;
     });
-    msg+=`   Total: ${formatPrice(total)}%0A%0AEspero tu confirmación. ¡Gracias!`;
-    return msg;
-}
-function sendWhatsApp(){ let m=generateWhatsAppMessage(); if(m) window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${m}`,'_blank'); else alert("Vacío"); }
-function openImageModal(src){ let m=document.getElementById("imageModal"); m.style.display="flex"; document.getElementById("modalImage").src=src; }
-function closeImageModal(){ document.getElementById("imageModal").style.display="none"; }
-function applyFiltersAndRender(){
-    let result = [...allProducts];
-    if(currentCategory!=="all") result=result.filter(p=>p.categoria===currentCategory);
-    filteredProducts=result;
-    let grid=document.getElementById("productsGrid");
-    if(!filteredProducts.length){ grid.innerHTML='<div class="col-span-full text-center py-12">Sin productos</div>'; return; }
-    let html="";
-    filteredProducts.forEach(p=>{ let qid=`qty_${p.id}`;
-        let talleSelectorHtml = "";
-        if(p.talles && p.talles.length>0){
-            let options = p.talles.map(t=>`<option value="${escapeHtml(t)}">Talle ${escapeHtml(t)}</option>`).join('');
-            talleSelectorHtml = `<div class="mt-2"><label class="text-xs text-gray-600">Talle:</label><select class="talle-select w-full mt-1" data-id="${p.id}" id="talle_${p.id}">${options}</select></div>`;
-        }
-        let ofertaHtml = (p.oferta && p.oferta.trim()!=="") ? `<div class="oferta-texto">🎉 ${escapeHtml(p.oferta)}</div>` : "";
-        let descripcionHtml = (p.descripcion && p.descripcion.trim()!=="") ? `<div class="text-gray-600 text-sm mb-2">${escapeHtml(p.descripcion)}</div>` : "";
-        html+=`<div class="bg-white rounded-2xl border shadow-sm overflow-hidden flex flex-col"><div class="bg-gray-100 h-48 cursor-pointer overflow-hidden" onclick="openImageModal('${escapeHtml(p.imagen)}')"><img src="${escapeHtml(p.imagen)}" class="w-full h-full object-cover hover:scale-105 transition"></div><div class="p-5"><div class="flex justify-between items-start gap-2 mb-2"><h3 class="font-bold">${escapeHtml(p.nombre)}</h3><span class="bg-indigo-50 text-indigo-700 text-xs px-2 py-1 rounded-md">${escapeHtml(p.categoria)}</span></div>${descripcionHtml}${ofertaHtml}<div class="font-black text-xl text-indigo-600">${formatPrice(p.precio)}</div>${talleSelectorHtml}<div class="flex items-center justify-between gap-2 mt-4"><div class="flex bg-gray-100 rounded-lg"><button class="qty-btn decr-qty" data-id="${p.id}">−</button><input type="number" id="${qid}" value="0" min="0" max="99" class="qty-input w-12 text-center bg-transparent"><button class="qty-btn incr-qty" data-id="${p.id}">+</button></div><button class="add-specific-btn bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-xl transition-colors" data-id="${p.id}" data-nombre="${escapeHtml(p.nombre)}" data-precio="${p.precio}" data-imagen="${escapeHtml(p.imagen)}">Agregar</button></div></div></div>`;
+    
+    document.querySelector(`.decr-qty[data-id="${p.id}"]`)?.addEventListener('click', () => {
+      let v = parseInt(inp.value) || 0;
+      if (v > 0) inp.value = v - 1;
     });
-    grid.innerHTML=html;
-    filteredProducts.forEach(p=>{
-        let inp=document.getElementById(`qty_${p.id}`);
-        let talleSelect = document.querySelector(`.talle-select[data-id="${p.id}"]`);
-        document.querySelector(`.incr-qty[data-id="${p.id}"]`)?.addEventListener('click',()=>{ let v=parseInt(inp.value)||0; if(v<99) inp.value=v+1; });
-        document.querySelector(`.decr-qty[data-id="${p.id}"]`)?.addEventListener('click',()=>{ let v=parseInt(inp.value)||0; if(v>0) inp.value=v-1; });
-        document.querySelector(`.add-specific-btn[data-id="${p.id}"]`)?.addEventListener('click',()=>{ let cant=parseInt(inp.value)||0; if(cant>0){ let talle = talleSelect ? talleSelect.value : null; addToCart(p.id, p.nombre, p.precio, p.imagen, cant, talle); inp.value=0; } });
+    
+    document.querySelector(`.add-specific-btn[data-id="${p.id}"]`)?.addEventListener('click', () => {
+      let cant = parseInt(inp.value) || 0;
+      if (cant > 0) {
+        let talle = talleSelect ? talleSelect.value : null;
+        addToCart(p.id, p.nombre, p.precio, p.imagen, cant, talle);
+        inp.value = 0;
+      }
     });
+  });
 }
-function updateCategories(){
-    let cats=[...new Set(allProducts.map(p=>p.categoria))];
-    let cont=document.getElementById("categoriesFilter");
-    let allBtn=cont.querySelector('.cat-btn[data-cat="all"]');
-    cont.innerHTML=""; cont.appendChild(allBtn);
-    cats.forEach(c=>{ let btn=document.createElement('button'); btn.setAttribute('data-cat',c); btn.textContent=c; btn.className="cat-btn px-5 py-2.5 rounded-xl font-medium bg-gray-50 text-gray-600 hover:bg-gray-100"; cont.appendChild(btn); });
+
+function updateCategories() {
+  let cats = [...new Set(allProducts.map(p => p.categoria))];
+  let cont = document.getElementById("categoriesFilter");
+  let allBtn = document.createElement('button');
+  allBtn.setAttribute('data-cat', 'all');
+  allBtn.textContent = '✨ Todos';
+  allBtn.className = 'cat-btn active';
+  
+  cont.innerHTML = "";
+  cont.appendChild(allBtn);
+  
+  cats.forEach(c => {
+    let btn = document.createElement('button');
+    btn.setAttribute('data-cat', c);
+    btn.textContent = c;
+    btn.className = "cat-btn";
+    cont.appendChild(btn);
+  });
+  
+  highlightActive();
+}
+
+function highlightActive() {
+  document.querySelectorAll('.cat-btn').forEach(b => {
+    let v = b.dataset.cat;
+    if ((currentCategory === "all" && v === "all") || (currentCategory !== "all" && v === currentCategory)) {
+      b.classList.add('active');
+    } else {
+      b.classList.remove('active');
+    }
+  });
+}
+
+// EVENT LISTENERS
+document.getElementById("categoriesFilter").addEventListener("click", e => {
+  let b = e.target.closest(".cat-btn");
+  if (b) {
+    currentCategory = b.dataset.cat;
     highlightActive();
-}
-function highlightActive(){ document.querySelectorAll('.cat-btn').forEach(b=>{ let v=b.dataset.cat; if((currentCategory==="all" && v==="all")||(currentCategory!=="all" && v===currentCategory)) b.classList.add('bg-indigo-600','text-white'); else b.classList.remove('bg-indigo-600','text-white'); }); }
-document.getElementById("categoriesFilter").addEventListener("click",e=>{ let b=e.target.closest(".cat-btn"); if(b){ currentCategory=b.dataset.cat; highlightActive(); applyFiltersAndRender(); } });
-document.getElementById("cartButton").addEventListener("click",()=>{ document.getElementById("cartOffcanvas").classList.add("open"); document.getElementById("offcanvasBackdrop").classList.add("show"); });
-document.getElementById("closeCartBtn").addEventListener("click",()=>{ document.getElementById("cartOffcanvas").classList.remove("open"); document.getElementById("offcanvasBackdrop").classList.remove("show"); });
-document.getElementById("backFromCartBtn").addEventListener("click",()=>{ document.getElementById("cartOffcanvas").classList.remove("open"); document.getElementById("offcanvasBackdrop").classList.remove("show"); });
-document.getElementById("offcanvasBackdrop").addEventListener("click",()=>{ document.getElementById("cartOffcanvas").classList.remove("open"); document.getElementById("offcanvasBackdrop").classList.remove("show"); });
-document.getElementById("whatsappBtn").addEventListener("click",sendWhatsApp);
-document.getElementById("closeModalBtn").addEventListener("click",function(e){ e.stopPropagation(); closeImageModal(); });
-updateCategories(); applyFiltersAndRender();
+    applyFiltersAndRender();
+  }
+});
+
+document.getElementById("cartButton").addEventListener("click", () => {
+  document.getElementById("cartOffcanvas").classList.add("open");
+  document.getElementById("offcanvasBackdrop").classList.add("show");
+});
+
+document.getElementById("closeCartBtn").addEventListener("click", () => {
+  document.getElementById("cartOffcanvas").classList.remove("open");
+  document.getElementById("offcanvasBackdrop").classList.remove("show");
+});
+
+document.getElementById("backFromCartBtn").addEventListener("click", () => {
+  document.getElementById("cartOffcanvas").classList.remove("open");
+  document.getElementById("offcanvasBackdrop").classList.remove("show");
+});
+
+document.getElementById("offcanvasBackdrop").addEventListener("click", () => {
+  document.getElementById("cartOffcanvas").classList.remove("open");
+  document.getElementById("offcanvasBackdrop").classList.remove("show");
+});
+
+document.getElementById("whatsappBtn").addEventListener("click", sendWhatsApp);
+
+document.getElementById("closeModalBtn").addEventListener("click", function(e) {
+  e.stopPropagation();
+  closeImageModal();
+});
+
+// INIT
+updateCategories();
+applyFiltersAndRender();
 </script>
+
 </body>
 </html>
